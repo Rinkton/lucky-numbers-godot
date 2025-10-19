@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://du87igtiyob7"]
+
+[ext_resource type="Texture2D" uid="uid://5cmk788h0kdv" path="res://cell.png" id="1_f2ill"]
+
+[node name="Control" type="Control"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 100.0
+offset_bottom = 100.0
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="Cell" type="Sprite2D" parent="."]
+position = Vector2(50, 50)
+texture = ExtResource("1_f2ill")
+hframes = 3
