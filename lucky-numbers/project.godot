@@ -15,10 +15,18 @@ run/main_scene="res://game.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+G="*res://g.gd"
+
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+
+[gui]
+
+theme/custom="res://new_theme.tres"
 
 [rendering]
 

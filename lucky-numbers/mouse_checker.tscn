@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwmeh3trs3fx8"]
+
+[ext_resource type="Script" path="res://mouse_checker.gd" id="1_h2pmt"]
+
+[node name="MouseChecker" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+script = ExtResource("1_h2pmt")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

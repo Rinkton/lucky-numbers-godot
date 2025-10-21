@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://d35ioh5palih0"]
+
+[ext_resource type="Texture2D" uid="uid://5cmk788h0kdv" path="res://cell.png" id="1_2rcbq"]
+[ext_resource type="Script" path="res://clover_pile.gd" id="1_6ohdj"]
+[ext_resource type="PackedScene" uid="uid://bwmeh3trs3fx8" path="res://mouse_checker.tscn" id="3_2ektb"]
+
+[node name="CloverPile" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+focus_mode = 2
+script = ExtResource("1_6ohdj")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(50, 50)
+texture = ExtResource("1_2rcbq")
+hframes = 3
+
+[node name="MouseChecker" parent="." instance=ExtResource("3_2ektb")]
+offset_right = 100.0
+offset_bottom = 100.0

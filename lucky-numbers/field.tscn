@@ -1,67 +1,87 @@
-[gd_scene load_steps=3 format=3 uid="uid://bv1s8th3lrxl6"]
+[gd_scene load_steps=4 format=3 uid="uid://bv1s8th3lrxl6"]
 
 [ext_resource type="Texture2D" uid="uid://cqlylofcxsw5h" path="res://field.png" id="1_xspou"]
+[ext_resource type="Script" path="res://field.gd" id="2_db4l5"]
 [ext_resource type="PackedScene" uid="uid://du87igtiyob7" path="res://cell.tscn" id="2_ig2au"]
 
 [node name="Field" type="TextureRect"]
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_xspou")
+script = ExtResource("2_db4l5")
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 10.0
-offset_right = 50.0
-offset_bottom = 50.0
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
-columns = 4
+offset_right = 440.0
+offset_bottom = 440.0
+theme_override_constants/separation = 10
 
-[node name="Cell" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(430, 100)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Cell" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell2" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell3" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell4" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell4" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell5" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(430, 100)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Cell" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell6" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell2" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell7" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell3" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell8" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell4" parent="VBoxContainer/HBoxContainer2" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell9" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(430, 100)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Cell" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell10" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell2" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell11" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell3" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell12" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell4" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell13" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(430, 100)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Cell" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell14" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell2" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell15" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell3" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="Cell16" parent="GridContainer" instance=ExtResource("2_ig2au")]
+[node name="Cell4" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ig2au")]
 layout_mode = 2

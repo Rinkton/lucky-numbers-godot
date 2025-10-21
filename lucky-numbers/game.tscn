@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://du0lelanxhrbt"]
+[gd_scene load_steps=6 format=3 uid="uid://du0lelanxhrbt"]
 
 [ext_resource type="Texture2D" uid="uid://x40l55jww4pe" path="res://high_panel_bg.png" id="1_1ggbm"]
+[ext_resource type="Script" path="res://game.gd" id="1_ku7cq"]
 [ext_resource type="PackedScene" uid="uid://bv1s8th3lrxl6" path="res://field.tscn" id="2_l1u56"]
+[ext_resource type="PackedScene" uid="uid://d35ioh5palih0" path="res://clover_pile.tscn" id="4_p2cst"]
+[ext_resource type="PackedScene" uid="uid://b5sotkq43tjnq" path="res://face_up_pile.tscn" id="5_whllf"]
 
 [node name="Game" type="Control"]
 layout_mode = 3
@@ -11,12 +14,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("1_ku7cq")
 metadata/_edit_lock_ = true
 
 [node name="Bg" type="ColorRect" parent="."]
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 720.0
+mouse_filter = 2
 color = Color(0.960784, 0.960784, 0.960784, 1)
 metadata/_edit_lock_ = true
 
@@ -30,6 +35,7 @@ offset_top = 28.0
 offset_right = 594.5
 offset_bottom = 158.0
 grow_horizontal = 2
+mouse_filter = 2
 texture = ExtResource("1_1ggbm")
 
 [node name="Field" parent="." instance=ExtResource("2_l1u56")]
@@ -56,3 +62,16 @@ offset_right = -46.0
 offset_bottom = -46.0
 grow_horizontal = 0
 grow_vertical = 0
+
+[node name="CloverPile" parent="." instance=ExtResource("4_p2cst")]
+layout_mode = 2
+offset_left = 62.0
+offset_top = 42.0
+offset_right = 62.0
+offset_bottom = 42.0
+
+[node name="FaceUpPile" parent="." instance=ExtResource("5_whllf")]
+offset_left = 189.0
+offset_top = 43.0
+offset_right = 229.0
+offset_bottom = 83.0
