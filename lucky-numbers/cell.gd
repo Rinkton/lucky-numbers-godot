@@ -14,6 +14,7 @@ static func new_scene():
 	return scene
 
 
+# TODO face_up cells won't have field
 func get_field() -> Field:
 	var node = get_parent()
 	while not(node is Field):
@@ -45,12 +46,8 @@ func clear_clover():
 
 func _on_lmb():
 	if G.game.whos_this_cell(self) == G.game.cur_player:
-		var focus_owner = get_viewport().gui_get_focus_owner()
+		var focus_owner = Utils.get_focus_owner_that_sharing_clover()
 		if not is_instance_valid(focus_owner):
-			return
-		if not focus_owner.is_there_clover():
-			return
-		if not(focus_owner is CloverPile):
 			return
 		var clover = focus_owner.get_clover()
 		if not is_instance_valid(clover):

@@ -28,6 +28,8 @@ func get_is_this_clover_on_this_cell_acceptable(this_clover: Clover, this_cell: 
 
 
 func get_cell(x: int, y: int):
+	if x < 0 or y < 0:
+		return
 	return $VBoxContainer.get_child(y).get_child(x)
 
 
