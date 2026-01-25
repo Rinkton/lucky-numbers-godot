@@ -11,11 +11,6 @@ var number: int:
 		$Label.text = str(number)
 
 
-func _ready():
-	get_parent().connect("focus_entered", _on_parent_focus_entered)
-	get_parent().connect("focus_exited", _on_parent_focus_exited)
-
-
 static func new_scene(number: int):
 	var scene = SCENE.instantiate()
 	scene.number = number
@@ -28,3 +23,13 @@ func _on_parent_focus_entered():
 
 func _on_parent_focus_exited():
 	frame = 1
+
+
+func _on_tree_entered():
+	get_parent().connect("focus_entered", _on_parent_focus_entered)
+	get_parent().connect("focus_exited", _on_parent_focus_exited)
+
+
+func _on_tree_exiting():
+	get_parent().disconnect("focus_entered", _on_parent_focus_entered)
+	get_parent().disconnect("focus_exited", _on_parent_focus_exited)

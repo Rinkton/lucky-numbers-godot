@@ -19,3 +19,6 @@ text = "**
 v"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
