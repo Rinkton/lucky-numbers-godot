@@ -14,6 +14,13 @@ static func new_scene():
 	return scene
 
 
+func get_field() -> Field:
+	var node = get_parent()
+	while not(node is Field):
+		node = node.get_parent()
+	return node
+
+
 func replace_clover(clover: Clover):
 	clear_clover()
 	add_child(clover)
@@ -39,11 +46,24 @@ func clear_clover():
 func _on_lmb():
 	if G.game.whos_this_cell(self) == G.game.cur_player:
 		var focus_owner = get_viewport().gui_get_focus_owner()
-		if focus_owner is CloverPile and focus_owner.is_there_clover():
+		if not is_instance_valid(focus_owner):
+			return
+		if not focus_owner.is_there_clover():
+			return
+		if not(focus_owner is CloverPile):
+			return
+		var clover = focus_owner.get_clover()
+		if not is_instance_valid(clover):
+			return
+		if not get_field().get_is_this_clover_on_this_cell_acceptable(clover, self):
+			modulate = Color.RED
+			await get_tree().create_timer(0.5).timeout
+			modulate = Color.WHITE
+			return
+		if focus_owner is CloverPile:
 			var prev_clover = get_clover()
 			if is_instance_valid(prev_clover):
 				remove_child(prev_clover)
-			var clover = focus_owner.get_clover()
 			focus_owner.remove_child(clover)
 			replace_clover(clover)
 			if is_instance_valid(prev_clover):
