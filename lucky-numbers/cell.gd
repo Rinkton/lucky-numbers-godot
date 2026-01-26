@@ -16,7 +16,6 @@ static func new_scene():
 	return scene
 
 
-# TODO face_up cells won't have field
 func get_field() -> Field:
 	var node = get_parent()
 	while not(node is Field):
