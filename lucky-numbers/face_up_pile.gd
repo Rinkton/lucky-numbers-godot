@@ -18,15 +18,6 @@ func add_clover(clover):
 	$HBoxContainer.add_child(cell)
 
 
-"""
-func remove_cell(cell):
-	if cell in $HBoxContainer.get_children():
-		$HBoxContainer.remove_child(cell)
-	else:
-		printerr("no cell in face_up_pile to remove_cell")
-"""
-
-
 func _on_panel_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -37,3 +28,5 @@ func _on_panel_gui_input(event):
 			var clover = focus_owner.get_clover()
 			focus_owner.remove_child(clover)
 			add_clover(clover)
+			var game = await G.get_game()
+			game.end_turn()

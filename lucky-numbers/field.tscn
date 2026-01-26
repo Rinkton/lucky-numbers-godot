@@ -85,3 +85,11 @@ layout_mode = 2
 
 [node name="Cell4" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ig2au")]
 layout_mode = 2
+
+[node name="TurnLabel" type="Label" parent="."]
+layout_mode = 0
+offset_top = -45.0
+offset_right = 450.0
+theme_override_colors/font_color = Color(0.05490196, 0.06666667, 0.06666667, 1)
+text = "Ход"
+horizontal_alignment = 1

@@ -34,7 +34,8 @@ func get_clover():
 
 
 func _on_lmb():
-	if G.game.cur_player is HumanPlayer:
+	var game = await G.get_game()
+	if game.cur_player is HumanPlayer:
 		if not is_there_clover():
 			var clover = pop_random_clover()
 			add_child(clover)

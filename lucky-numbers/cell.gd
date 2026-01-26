@@ -56,7 +56,8 @@ func clear_clover():
 
 
 func _on_lmb():
-	if G.game.whos_this_cell(self) == G.game.cur_player and is_instance_valid(get_field()):
+	var game = await G.get_game()
+	if game.whos_this_cell(self) == game.cur_player and is_instance_valid(get_field()):
 		var focus_owner = Utils.get_focus_owner_that_sharing_clover()
 		if not is_instance_valid(focus_owner):
 			return
@@ -75,7 +76,7 @@ func _on_lmb():
 			focus_owner.remove_child(clover)
 			replace_clover(clover)
 			if is_instance_valid(prev_clover):
-				G.game.face_up_pile.add_clover(prev_clover)
+				game.face_up_pile.add_clover(prev_clover)
 		elif focus_owner.get_is_in_face_up_pile():
 			var prev_clover = get_clover()
 			if is_instance_valid(prev_clover):
@@ -84,6 +85,7 @@ func _on_lmb():
 			focus_owner.queue_free()
 			replace_clover(clover)
 			if is_instance_valid(prev_clover):
-				G.game.face_up_pile.add_clover(prev_clover)
+				game.face_up_pile.add_clover(prev_clover)
 		else:
 			printerr("no focus_owner for cell")
+		game.end_turn()

@@ -5,10 +5,17 @@ class_name Field
 var player
 
 
+func _ready():
+	var game = await G.get_game()
+	game.connect("ended_turn", _on_game_ended_turn)
+	$TurnLabel.visible = game.cur_player == player
+
+
 func set_up_start_diagonal():
 	for i in range(4):
 		var cell = get_cell(i, i)
-		var clover = G.game.clover_pile.pop_random_clover()
+		var game = await G.get_game()
+		var clover = game.clover_pile.pop_random_clover()
 		cell.replace_clover(clover)
 
 
@@ -51,3 +58,8 @@ func get_vector_of_cell(cell: Cell) -> Vector2:
 				return Vector2(x, y)
 	printerr("get_vector_of_cell didn't found the cell")
 	return Vector2(-1, -1)
+
+
+func _on_game_ended_turn():
+	var game = await G.get_game()
+	$TurnLabel.visible = game.cur_player == player

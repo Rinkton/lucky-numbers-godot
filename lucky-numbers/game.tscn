@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://du0lelanxhrbt"]
 
 [ext_resource type="Texture2D" uid="uid://x40l55jww4pe" path="res://high_panel_bg.png" id="1_1ggbm"]
-[ext_resource type="Script" path="res://game.gd" id="1_ku7cq"]
+[ext_resource type="Script" uid="uid://buwq1ptas8ath" path="res://game.gd" id="1_ku7cq"]
 [ext_resource type="PackedScene" uid="uid://bv1s8th3lrxl6" path="res://field.tscn" id="2_l1u56"]
 [ext_resource type="PackedScene" uid="uid://d35ioh5palih0" path="res://clover_pile.tscn" id="4_p2cst"]
 [ext_resource type="PackedScene" uid="uid://b5sotkq43tjnq" path="res://face_up_pile.tscn" id="5_whllf"]
@@ -64,13 +64,14 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="CloverPile" parent="." instance=ExtResource("4_p2cst")]
-layout_mode = 2
+layout_mode = 0
 offset_left = 62.0
 offset_top = 42.0
 offset_right = 62.0
 offset_bottom = 42.0
 
 [node name="FaceUpPile" parent="." instance=ExtResource("5_whllf")]
+layout_mode = 0
 offset_left = 189.0
 offset_top = 43.0
 offset_right = 229.0
