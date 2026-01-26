@@ -16,10 +16,18 @@ func get_is_this_clover_on_this_cell_acceptable(this_clover: Clover, this_cell: 
 	var this_vector = get_vector_of_cell(this_cell)
 	
 	var up_cell = get_cell(this_vector.x, this_vector.y - 1)
+	var right_cell = get_cell(this_vector.x + 1, this_vector.y)
+	var down_cell = get_cell(this_vector.x, this_vector.y + 1)
 	var left_cell = get_cell(this_vector.x - 1, this_vector.y)
 	
 	if is_instance_valid(up_cell) and up_cell.is_there_clover():
 		if up_cell.get_clover().number >= this_clover.number:
+			return false
+	if is_instance_valid(right_cell) and right_cell.is_there_clover():
+		if right_cell.get_clover().number <= this_clover.number:
+			return false
+	if is_instance_valid(down_cell) and down_cell.is_there_clover():
+		if down_cell.get_clover().number <= this_clover.number:
 			return false
 	if is_instance_valid(left_cell) and left_cell.is_there_clover():
 		if left_cell.get_clover().number >= this_clover.number:
@@ -29,6 +37,8 @@ func get_is_this_clover_on_this_cell_acceptable(this_clover: Clover, this_cell: 
 
 func get_cell(x: int, y: int):
 	if x < 0 or y < 0:
+		return
+	if x > 3 or y > 3:
 		return
 	return $VBoxContainer.get_child(y).get_child(x)
 

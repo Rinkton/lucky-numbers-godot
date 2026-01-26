@@ -18,8 +18,19 @@ static func new_scene():
 func get_field() -> Field:
 	var node = get_parent()
 	while not(node is Field):
+		if not is_instance_valid(node):
+			return null
 		node = node.get_parent()
 	return node
+
+
+func get_is_in_face_up_pile():
+	var node = get_parent()
+	while not(node is FaceUpPile):
+		if not is_instance_valid(node):
+			return false
+		node = node.get_parent()
+	return true
 
 
 func replace_clover(clover: Clover):
@@ -45,7 +56,7 @@ func clear_clover():
 
 
 func _on_lmb():
-	if G.game.whos_this_cell(self) == G.game.cur_player:
+	if G.game.whos_this_cell(self) == G.game.cur_player and is_instance_valid(get_field()):
 		var focus_owner = Utils.get_focus_owner_that_sharing_clover()
 		if not is_instance_valid(focus_owner):
 			return
@@ -65,3 +76,14 @@ func _on_lmb():
 			replace_clover(clover)
 			if is_instance_valid(prev_clover):
 				G.game.face_up_pile.add_clover(prev_clover)
+		elif focus_owner.get_is_in_face_up_pile():
+			var prev_clover = get_clover()
+			if is_instance_valid(prev_clover):
+				remove_child(prev_clover)
+			focus_owner.remove_child(clover)
+			focus_owner.queue_free()
+			replace_clover(clover)
+			if is_instance_valid(prev_clover):
+				G.game.face_up_pile.add_clover(prev_clover)
+		else:
+			printerr("no focus_owner for cell")

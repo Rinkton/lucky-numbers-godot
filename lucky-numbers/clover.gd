@@ -28,6 +28,7 @@ func _on_parent_focus_exited():
 func _on_tree_entered():
 	get_parent().connect("focus_entered", _on_parent_focus_entered)
 	get_parent().connect("focus_exited", _on_parent_focus_exited)
+	_on_parent_focus_exited()
 
 
 func _on_tree_exiting():
