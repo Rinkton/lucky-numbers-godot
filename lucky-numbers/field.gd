@@ -8,7 +8,7 @@ var player
 func _ready():
 	var game = await G.get_game()
 	game.connect("ended_turn", _on_game_ended_turn)
-	$TurnLabel.visible = game.cur_player == player
+	$StateLabel.visible = game.cur_player == player
 
 
 func set_up_start_diagonal():
@@ -60,6 +60,19 @@ func get_vector_of_cell(cell: Cell) -> Vector2:
 	return Vector2(-1, -1)
 
 
+func get_is_full():
+	for row in $VBoxContainer.get_children():
+		for cell in row.get_children():
+			if not is_instance_valid(cell.get_clover()):
+				return false
+	return true
+
+
 func _on_game_ended_turn():
 	var game = await G.get_game()
-	$TurnLabel.visible = game.cur_player == player
+	if get_is_full():
+		$StateLabel.text = "Победа!"
+		$StateLabel.add_theme_color_override("font_color", Color.GREEN)
+		game.cur_player = null
+	else:
+		$StateLabel.visible = game.cur_player == player

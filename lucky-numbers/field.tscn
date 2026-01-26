@@ -86,7 +86,7 @@ layout_mode = 2
 [node name="Cell4" parent="VBoxContainer/HBoxContainer4" instance=ExtResource("2_ig2au")]
 layout_mode = 2
 
-[node name="TurnLabel" type="Label" parent="."]
+[node name="StateLabel" type="Label" parent="."]
 layout_mode = 0
 offset_top = -45.0
 offset_right = 450.0
