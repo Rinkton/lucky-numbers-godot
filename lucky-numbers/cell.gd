@@ -7,6 +7,8 @@ const SCENE = preload("res://cell.tscn")
 
 func _ready():
 	$MouseChecker.connect("lmb", _on_lmb)
+	if is_instance_valid(get_field()):
+		focus_mode = Control.FOCUS_NONE
 
 
 static func new_scene():

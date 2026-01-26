@@ -39,3 +39,9 @@ func _on_lmb():
 		if not is_there_clover():
 			var clover = pop_random_clover()
 			add_child(clover)
+
+
+func _on_focus_exited():
+	if is_instance_valid(get_clover()):
+		await get_tree().process_frame
+		grab_focus()

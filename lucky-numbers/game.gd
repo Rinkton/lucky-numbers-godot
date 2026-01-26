@@ -24,7 +24,7 @@ func _ready():
 func end_turn():
 	players.reverse()
 	cur_player = players[0]
-	await get_tree().physics_frame
+	await get_tree().process_frame
 	ended_turn.emit()
 
 
