@@ -15,64 +15,48 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_ku7cq")
-metadata/_edit_lock_ = true
 
 [node name="Bg" type="ColorRect" parent="."]
 layout_mode = 0
-offset_right = 1280.0
-offset_bottom = 720.0
+offset_right = 1440.0
+offset_bottom = 630.0
 mouse_filter = 2
 color = Color(0.960784, 0.960784, 0.960784, 1)
 metadata/_edit_lock_ = true
 
 [node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -594.5
-offset_top = 28.0
-offset_right = 594.5
-offset_bottom = 158.0
-grow_horizontal = 2
+layout_mode = 0
+offset_left = 125.0
+offset_top = 5.0
+offset_right = 1314.0
+offset_bottom = 135.0
 mouse_filter = 2
 texture = ExtResource("1_1ggbm")
 
 [node name="Field" parent="." instance=ExtResource("2_l1u56")]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 46.0
-offset_top = -496.0
-offset_right = 496.0
-offset_bottom = -46.0
-grow_vertical = 0
+layout_mode = 0
+offset_left = 125.0
+offset_top = 176.0
+offset_right = 575.0
+offset_bottom = 626.0
 
 [node name="Field2" parent="." instance=ExtResource("2_l1u56")]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -496.0
-offset_top = -496.0
-offset_right = -46.0
-offset_bottom = -46.0
-grow_horizontal = 0
-grow_vertical = 0
+layout_mode = 0
+offset_left = 864.0
+offset_top = 176.0
+offset_right = 1314.0
+offset_bottom = 626.0
 
 [node name="CloverPile" parent="." instance=ExtResource("4_p2cst")]
 layout_mode = 0
-offset_left = 62.0
-offset_top = 42.0
-offset_right = 62.0
-offset_bottom = 42.0
+offset_left = 140.5
+offset_top = 19.0
+offset_right = 140.5
+offset_bottom = 19.0
 
 [node name="FaceUpPile" parent="." instance=ExtResource("5_whllf")]
 layout_mode = 0
-offset_left = 189.0
-offset_top = 43.0
-offset_right = 229.0
-offset_bottom = 83.0
+offset_left = 267.5
+offset_top = 20.0
+offset_right = 307.5
+offset_bottom = 60.0
