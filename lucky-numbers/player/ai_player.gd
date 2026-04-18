@@ -3,6 +3,7 @@ class_name AiPlayer
 
 
 const FIELD_SIZE := 4
+const DATA = preload("res://player/ai_player_data.tres") as AiPlayerData
 
 var my_field: Field
 var enemy_field: Field
@@ -20,8 +21,13 @@ func turn():
 	_get_clover_pile_flexibility(my_field)
 	#print("best ", best_moves)
 	var clover = G.game.clover_pile.pop_random_clover()
-	var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
-	cell.put_clover_turn(clover, G.game.clover_pile)
+	# TODO: Нужны хорошие гибкие рычаги калибровки, а также их редактура прям во время игры
+	# TODO: Для worth нужно брать флекс всех 20 типов от хода на лучшую клетку и соответственно не делить
+		# среднеарифметическое на 16
+	# CloverPile может истощиться
+	if is_instance_valid(clover):
+		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
+		cell.put_clover_turn(clover, G.game.clover_pile)
 	print(best_moves[clover.number])
 
 
@@ -80,7 +86,8 @@ func _get_clover_pile_flexibility(field: Field):
 				clover_flexibility *= clover_pile_dict[i]
 				if best_moves[i]["flex"] < clover_flexibility:
 					# Для мотивации поставить новый клевер
-					var motivation = 150
+					# Меньше, чем дальше к правому краю, ибо там flexibility ниже само по себе
+					var motivation = 100 * (DATA.motivation_position_curve.sample((x + y + 1)/7))
 					var final_clover_flexibility := clover_flexibility
 					if not cell.is_there_clover():
 						final_clover_flexibility += motivation

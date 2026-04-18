@@ -85,6 +85,9 @@ func put_clover_turn(clover, focus_owner):
 	else:
 		printerr("no focus_owner for cell")
 	game.end_turn()
+	modulate = Color.GREEN
+	await get_tree().create_timer(0.5).timeout
+	modulate = Color.WHITE
 
 
 func _on_lmb():
