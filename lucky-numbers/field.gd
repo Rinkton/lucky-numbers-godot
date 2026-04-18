@@ -17,6 +17,16 @@ func set_up_start_diagonal():
 		var game = await G.get_game()
 		var clover = game.clover_pile.pop_random_clover()
 		cell.replace_clover(clover)
+	"""
+	for i in range(4):
+		for j in range(4):
+			if randi_range(0, 2) == 0:
+				continue
+			var cell = get_cell(i, j)
+			var game = await G.get_game()
+			var clover = game.clover_pile.pop_random_clover()
+			cell.replace_clover(clover)
+	"""
 
 
 func get_is_this_clover_on_this_cell_acceptable(this_clover: Clover, this_cell: Cell) -> bool:
@@ -50,14 +60,14 @@ func get_cell(x: int, y: int):
 	return $VBoxContainer.get_child(y).get_child(x)
 
 
-func get_vector_of_cell(cell: Cell) -> Vector2:
+func get_vector_of_cell(cell: Cell) -> Vector2i:
 	for y in range($VBoxContainer.get_child_count()):
 		var row = $VBoxContainer.get_child(y)
 		for x in range(row.get_child_count()):
 			if row.get_child(x) == cell:
-				return Vector2(x, y)
+				return Vector2i(x, y)
 	printerr("get_vector_of_cell didn't found the cell")
-	return Vector2(-1, -1)
+	return Vector2i(-1, -1)
 
 
 func get_is_full():

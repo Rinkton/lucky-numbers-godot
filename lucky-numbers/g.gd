@@ -1,20 +1,20 @@
 extends Node
 
 
-signal _game_set
+signal game_set
 
-var _game: Game:
+var game: Game:
 	set(value):
-		_game = value
-		_game_set.emit()
+		game = value
+		game_set.emit()
 
 
 func get_game():
-	if is_instance_valid(_game):
-		return _game
-	await _game_set
-	return _game
+	if is_instance_valid(game):
+		return game
+	await game_set
+	return game
 
 
-func set_game(game):
-	_game = game
+func set_game(game_):
+	game = game_

@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://du87igtiyob7"]
+[gd_scene format=3 uid="uid://du87igtiyob7"]
 
 [ext_resource type="Texture2D" uid="uid://5cmk788h0kdv" path="res://cell.png" id="1_f2ill"]
 [ext_resource type="Script" uid="uid://0py50mgwbi2b" path="res://cell.gd" id="1_rj7qh"]
 [ext_resource type="PackedScene" uid="uid://bwmeh3trs3fx8" path="res://mouse_checker.tscn" id="3_88vch"]
 
-[node name="Cell" type="Control"]
+[node name="Cell" type="Control" unique_id=1660228137]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 3
 anchors_preset = 0
@@ -14,12 +14,12 @@ focus_mode = 2
 script = ExtResource("1_rj7qh")
 metadata/_edit_lock_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1230642696]
 position = Vector2(50, 50)
 texture = ExtResource("1_f2ill")
 hframes = 3
 
-[node name="MouseChecker" parent="." instance=ExtResource("3_88vch")]
+[node name="MouseChecker" parent="." unique_id=1484205485 instance=ExtResource("3_88vch")]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
