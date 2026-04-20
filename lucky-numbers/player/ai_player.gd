@@ -43,7 +43,7 @@ func _get_clover_pile_worth_for_me():
 	# , делить на количество клеверов в куче(по итогу то мы получим только 1) и ещё на 16, ибо
 	# Мы помимо клеток для выбора клевера перебирали ещё и ценность для остальных 15 клеток минус
 	# ценность без клевера из кучи на поле
-	var worth = (new_empty + new_busy) / (count * 16) - (cur_empty + cur_busy)
+	var worth = (new_empty + new_busy) / (count) - (cur_empty + cur_busy)
 	
 	return worth
 
@@ -81,7 +81,7 @@ func _get_clover_pile_flexibility(field: Field):
 								continue
 							var cell = field.get_cell(xx, yy)
 							var cell_flexibility = _get_cell_flexibility(cell, Vector3i(x, y, i))
-							clover_flexibility += cell_flexibility
+							clover_flexibility = max(cell_flexibility, clover_flexibility)
 				var cell = field.get_cell(x, y)
 				clover_flexibility *= clover_pile_dict[i]
 				if best_moves[i]["flex"] < clover_flexibility:
