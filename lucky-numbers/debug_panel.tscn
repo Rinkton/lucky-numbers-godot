@@ -1,0 +1,186 @@
+[gd_scene format=3 uid="uid://dsncwor3rdibg"]
+
+[ext_resource type="Script" uid="uid://bfndwqalbltoq" path="res://debug_panel.gd" id="1_irpul"]
+[ext_resource type="PackedScene" uid="uid://bv1s8th3lrxl6" path="res://field.tscn" id="2_fjk6b"]
+[ext_resource type="PackedScene" uid="uid://dw475pfhsm5rd" path="res://debug_clover_button.tscn" id="3_1hgyt"]
+
+[node name="DebugPanel" type="Control" unique_id=267816238]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1440.0
+offset_bottom = 630.0
+mouse_filter = 2
+script = ExtResource("1_irpul")
+metadata/_edit_lock_ = true
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1100731471]
+layout_mode = 0
+offset_left = 758.0
+offset_top = -4.0
+offset_right = 1445.0
+offset_bottom = 639.0
+color = Color(0.646029, 0.646029, 0.646029, 1)
+
+[node name="Field" parent="ColorRect" unique_id=1529506967 instance=ExtResource("2_fjk6b")]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 178.0
+offset_right = 465.0
+offset_bottom = 628.0
+
+[node name="GridContainer" type="GridContainer" parent="ColorRect" unique_id=387537765]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 20.0
+offset_right = 657.0
+offset_bottom = 132.0
+columns = 10
+
+[node name="Control" type="Control" parent="ColorRect/GridContainer" unique_id=142602728]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control" unique_id=1568547036 instance=ExtResource("3_1hgyt")]
+debug_number = 1
+
+[node name="Control2" type="Control" parent="ColorRect/GridContainer" unique_id=277990955]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control2" unique_id=1593111859 instance=ExtResource("3_1hgyt")]
+debug_number = 2
+
+[node name="Control3" type="Control" parent="ColorRect/GridContainer" unique_id=2007318474]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control3" unique_id=1206158607 instance=ExtResource("3_1hgyt")]
+debug_number = 3
+
+[node name="Control4" type="Control" parent="ColorRect/GridContainer" unique_id=916112819]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control4" unique_id=487349387 instance=ExtResource("3_1hgyt")]
+debug_number = 4
+
+[node name="Control5" type="Control" parent="ColorRect/GridContainer" unique_id=1287276971]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control5" unique_id=1309099462 instance=ExtResource("3_1hgyt")]
+debug_number = 5
+
+[node name="Control6" type="Control" parent="ColorRect/GridContainer" unique_id=534103412]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control6" unique_id=1435532987 instance=ExtResource("3_1hgyt")]
+debug_number = 6
+
+[node name="Control7" type="Control" parent="ColorRect/GridContainer" unique_id=2138145567]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control7" unique_id=944830899 instance=ExtResource("3_1hgyt")]
+debug_number = 7
+
+[node name="Control8" type="Control" parent="ColorRect/GridContainer" unique_id=277601256]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control8" unique_id=480762024 instance=ExtResource("3_1hgyt")]
+debug_number = 8
+
+[node name="Control9" type="Control" parent="ColorRect/GridContainer" unique_id=1404338893]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control9" unique_id=1755031618 instance=ExtResource("3_1hgyt")]
+debug_number = 9
+
+[node name="Control10" type="Control" parent="ColorRect/GridContainer" unique_id=2016010050]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control10" unique_id=865032611 instance=ExtResource("3_1hgyt")]
+debug_number = 10
+
+[node name="Control11" type="Control" parent="ColorRect/GridContainer" unique_id=1888016]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control11" unique_id=1979731927 instance=ExtResource("3_1hgyt")]
+debug_number = 11
+
+[node name="Control12" type="Control" parent="ColorRect/GridContainer" unique_id=1366982644]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control12" unique_id=2065379153 instance=ExtResource("3_1hgyt")]
+debug_number = 12
+
+[node name="Control13" type="Control" parent="ColorRect/GridContainer" unique_id=1333189265]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control13" unique_id=670434734 instance=ExtResource("3_1hgyt")]
+debug_number = 13
+
+[node name="Control14" type="Control" parent="ColorRect/GridContainer" unique_id=956718736]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control14" unique_id=842523694 instance=ExtResource("3_1hgyt")]
+debug_number = 14
+
+[node name="Control15" type="Control" parent="ColorRect/GridContainer" unique_id=297075808]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control15" unique_id=146362827 instance=ExtResource("3_1hgyt")]
+debug_number = 15
+
+[node name="Control16" type="Control" parent="ColorRect/GridContainer" unique_id=870523924]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control16" unique_id=165398443 instance=ExtResource("3_1hgyt")]
+debug_number = 16
+
+[node name="Control17" type="Control" parent="ColorRect/GridContainer" unique_id=1027971624]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control17" unique_id=1311229508 instance=ExtResource("3_1hgyt")]
+debug_number = 17
+
+[node name="Control18" type="Control" parent="ColorRect/GridContainer" unique_id=430744304]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control18" unique_id=1110428110 instance=ExtResource("3_1hgyt")]
+debug_number = 18
+
+[node name="Control19" type="Control" parent="ColorRect/GridContainer" unique_id=1948884890]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control19" unique_id=2037302438 instance=ExtResource("3_1hgyt")]
+debug_number = 19
+
+[node name="Control20" type="Control" parent="ColorRect/GridContainer" unique_id=228037072]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DebugCloverButton" parent="ColorRect/GridContainer/Control20" unique_id=1206590795 instance=ExtResource("3_1hgyt")]
+debug_number = 20
+
+[node name="OpenPanel" type="Panel" parent="." unique_id=784119233]
+layout_mode = 0
+offset_left = 1410.0
+offset_top = 167.0
+offset_right = 1450.0
+offset_bottom = 514.0
+
+[connection signal="mouse_entered" from="OpenPanel" to="." method="_on_open_panel_mouse_entered"]

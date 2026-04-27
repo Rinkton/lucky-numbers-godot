@@ -8,6 +8,7 @@ const DATA = preload("res://player/ai_player_data.tres") as AiPlayerData
 var my_field: Field
 var enemy_field: Field
 var best_moves := {}
+var all_moves := {}
 
 
 func _init():
@@ -15,20 +16,34 @@ func _init():
 
 
 func turn():
+	all_moves = {}
 	var clover_pile_dict = _get_clover_pile_dict()
 	# var a = my_field.get_cell(0, 0).get_clover().number
 	# _get_cell_flexibility(my_field.get_cell(1, 1))
 	_get_clover_pile_flexibility(my_field)
 	#print("best ", best_moves)
 	var clover = G.game.clover_pile.pop_random_clover()
+	print(clover.number)
 	# TODO: Нужны хорошие гибкие рычаги калибровки, а также их редактура прям во время игры
 	# TODO: Для worth нужно брать флекс всех 20 типов от хода на лучшую клетку и соответственно не делить
 		# среднеарифметическое на 16
+	# TODO: Под конец игры начинает ставить клеверы на невозможные клетки
 	# CloverPile может истощиться
 	if is_instance_valid(clover):
+		print(best_moves[clover.number])
 		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
 		cell.put_clover_turn(clover, G.game.clover_pile)
-	print(best_moves[clover.number])
+	G.debug_panel.set_all_moves(all_moves, my_field)
+	#print()
+	#print()
+	#for i in range(1, 21):
+	#	if i in all_moves:
+	#		print(str(i) + "              " + str(all_moves[i]))
+
+
+func print_best_moves(best_moves):
+	for i in range(1, 21):
+		print(str(i) + " " + str(best_moves[i]))
 
 
 func _get_clover_pile_worth_for_me():
@@ -43,7 +58,7 @@ func _get_clover_pile_worth_for_me():
 	# , делить на количество клеверов в куче(по итогу то мы получим только 1) и ещё на 16, ибо
 	# Мы помимо клеток для выбора клевера перебирали ещё и ценность для остальных 15 клеток минус
 	# ценность без клевера из кучи на поле
-	var worth = (new_empty + new_busy) / (count * 16) - (cur_empty + cur_busy)
+	var worth = (new_empty + new_busy) / (count) - (cur_empty + cur_busy)
 	
 	return worth
 
@@ -84,22 +99,32 @@ func _get_clover_pile_flexibility(field: Field):
 							clover_flexibility += cell_flexibility
 				var cell = field.get_cell(x, y)
 				clover_flexibility *= clover_pile_dict[i]
-				if best_moves[i]["flex"] < clover_flexibility:
-					# Для мотивации поставить новый клевер
-					# Меньше, чем дальше к правому краю, ибо там flexibility ниже само по себе
-					var motivation = 100 * (DATA.motivation_position_curve.sample((x + y + 1)/7))
-					var final_clover_flexibility := clover_flexibility
-					if not cell.is_there_clover():
-						final_clover_flexibility += motivation
+				
+				# Для мотивации поставить новый клевер
+				# Меньше, чем дальше к правому краю, ибо там flexibility ниже само по себе
+				var motivation = 100 * (DATA.motivation_position_curve.sample((x + y + 1)/7))
+				var final_clover_flexibility := clover_flexibility
+				if not cell.is_there_clover() and clover_flexibility != 0:
+					final_clover_flexibility += motivation
+				
+				if not (i in all_moves):
+					all_moves[i] = []
+				all_moves[i].append({
+					"x": x,
+					"y": y,
+					"flex": str(final_clover_flexibility) + " - \n" + str(int(motivation)),
+				})
+				
+				if best_moves[i]["flex"] < final_clover_flexibility:
 					best_moves[i] = {
 						"x": x,
 						"y": y,
 						"flex": final_clover_flexibility,
 					}
 				if cell.is_there_clover():
-					flexibility_busy += clover_flexibility
+					flexibility_busy += best_moves[i]["flex"]
 				else:
-					flexibility_empty += clover_flexibility
+					flexibility_empty += best_moves[i]["flex"]
 	return {"busy": flexibility_busy, "empty": flexibility_empty}
 
 

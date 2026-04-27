@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bv1s8th3lrxl6" path="res://field.tscn" id="2_l1u56"]
 [ext_resource type="PackedScene" uid="uid://d35ioh5palih0" path="res://clover_pile.tscn" id="4_p2cst"]
 [ext_resource type="PackedScene" uid="uid://b5sotkq43tjnq" path="res://face_up_pile.tscn" id="5_whllf"]
+[ext_resource type="PackedScene" uid="uid://dsncwor3rdibg" path="res://debug_panel.tscn" id="6_ryrav"]
 
 [node name="Game" type="Control" unique_id=1214219613]
 layout_mode = 3
@@ -60,3 +61,6 @@ offset_left = 267.5
 offset_top = 20.0
 offset_right = 307.5
 offset_bottom = 60.0
+
+[node name="DebugPanel" parent="." unique_id=267816238 instance=ExtResource("6_ryrav")]
+layout_mode = 0

@@ -7,6 +7,9 @@ var game: Game:
 	set(value):
 		game = value
 		game_set.emit()
+var debug_panel:
+	set(value):
+		debug_panel = value
 
 
 func get_game():
