@@ -6,3 +6,4 @@ class_name AiPlayerData
 @export var estimate_position_quiality_coef: float = 10
 @export var new_clover_mult: float = 1.2
 @export var left_up_corner_coef: float = 100
+@export var irreplacability_coef: float = 100

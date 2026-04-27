@@ -25,9 +25,12 @@ func turn():
 	var clover = G.game.clover_pile.pop_random_clover()
 	print(clover.number)
 	# TODO: Нужны хорошие гибкие рычаги калибровки, а также их редактура прям во время игры
-	# TODO: Для worth нужно брать флекс всех 20 типов от хода на лучшую клетку и соответственно не делить
-		# среднеарифметическое на 16
-	# TODO: Под конец игры начинает ставить клеверы на невозможные клетки
+	# TODO: Urgency Bonus for Corners, or he will put 20 always not in the corner
+	# TODO: Мб должен следить, сколько пустых клеток осталось у него, у меня, также
+	# должен резко реагировать, если он может сделать победный ход
+	# TODO: take back 4 packs for evolution algorithm(and divide in 2 the coef at
+	# the end of learning)
+	
 	# CloverPile может истощиться
 	if is_instance_valid(clover):
 		print(best_moves[clover.number])
@@ -117,6 +120,12 @@ func _get_clover_pile_flexibility(field: Field):
 					final_clover_flexibility += motivation
 				if not cell.is_there_clover():
 					final_clover_flexibility *= DATA.new_clover_mult
+				
+				if cell.is_there_clover():
+					var this_cell_flexibility =  _get_cell_flexibility(cell)
+					var irreplacability = (1 / this_cell_flexibility) * DATA.irreplacability_coef
+					motivation += irreplacability
+				
 				# Во, терь точно не будет ставить куда нельзя ставить
 				if not my_field.get_is_this_clover_on_this_cell_acceptable(
 				Clover.new_scene(i), cell):
