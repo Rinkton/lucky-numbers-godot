@@ -12,11 +12,15 @@ func _ready():
 
 
 func set_up_start_diagonal():
+	var clovers := []
 	for i in range(4):
-		var cell = get_cell(i, i)
 		var game = await G.get_game()
 		var clover = game.clover_pile.pop_random_clover()
-		cell.replace_clover(clover)
+		clovers.append(clover)
+	clovers.sort_custom(func(a, b): return a.number < b.number)
+	for i in range(4):
+		var cell = get_cell(i, i)
+		cell.replace_clover(clovers[i])
 	"""
 	for i in range(4):
 		for j in range(4):
