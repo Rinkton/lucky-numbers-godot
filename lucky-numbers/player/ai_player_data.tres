@@ -10,5 +10,4 @@ point_count = 2
 script = ExtResource("1_s8my4")
 motivation_position_curve = SubResource("Curve_s8my4")
 estimate_position_quiality_coef = 120.0
-new_clover_add = 50.0
 left_up_corner_coef = 40.0

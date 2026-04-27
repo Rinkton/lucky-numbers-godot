@@ -32,6 +32,10 @@ func turn():
 	if is_instance_valid(clover):
 		print(best_moves[clover.number])
 		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
+		if not cell.is_there_clover():
+			print("empty cell")
+		else:
+			print("replaced: " + str(cell.get_clover().number))
 		cell.put_clover_turn(clover, G.game.clover_pile)
 	print("coef: " + str(estimate_position_quality(best_moves[clover.number]["x"], 
 		best_moves[clover.number]["y"], clover.number)))
@@ -112,7 +116,7 @@ func _get_clover_pile_flexibility(field: Field):
 				if clover_flexibility != 0:
 					final_clover_flexibility += motivation
 				if not cell.is_there_clover():
-					final_clover_flexibility += DATA.new_clover_add
+					final_clover_flexibility *= DATA.new_clover_mult
 				# Во, терь точно не будет ставить куда нельзя ставить
 				if not my_field.get_is_this_clover_on_this_cell_acceptable(
 				Clover.new_scene(i), cell):
