@@ -3,9 +3,12 @@
 [ext_resource type="Script" uid="uid://c0gvvopitbbsc" path="res://player/ai_player_data.gd" id="1_s8my4"]
 
 [sub_resource type="Curve" id="Curve_s8my4"]
-_data = [Vector2(0, 0.94382024), 0.0, 0.15280938, 0, 0, Vector2(0.98529404, 0.19101131), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.94382024), 0.0, 0.15280938, 0, 0, Vector2(1, 0.6328125), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [resource]
 script = ExtResource("1_s8my4")
 motivation_position_curve = SubResource("Curve_s8my4")
+estimate_position_quiality_coef = 120.0
+new_clover_add = 50.0
+left_up_corner_coef = 40.0

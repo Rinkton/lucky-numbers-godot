@@ -33,6 +33,8 @@ func turn():
 		print(best_moves[clover.number])
 		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
 		cell.put_clover_turn(clover, G.game.clover_pile)
+	print("coef: " + str(estimate_position_quality(best_moves[clover.number]["x"], 
+		best_moves[clover.number]["y"], clover.number)))
 	G.debug_panel.set_all_moves(all_moves, my_field)
 	#print()
 	#print()
@@ -101,11 +103,20 @@ func _get_clover_pile_flexibility(field: Field):
 				clover_flexibility *= clover_pile_dict[i]
 				
 				# Для мотивации поставить новый клевер
-				# Меньше, чем дальше к правому краю, ибо там flexibility ниже само по себе
-				var motivation = 100 * (DATA.motivation_position_curve.sample((x + y + 1)/7))
+				# Меньше, чем дальше к правому краю, ибо там flexibility выше само по себе
+				var motivation = DATA.left_up_corner_coef * \
+					(DATA.motivation_position_curve.sample((x + y + 1)/7))
+
+				motivation += estimate_position_quality(x, y, i) * DATA.estimate_position_quiality_coef
 				var final_clover_flexibility := clover_flexibility
-				if not cell.is_there_clover() and clover_flexibility != 0:
+				if clover_flexibility != 0:
 					final_clover_flexibility += motivation
+				if not cell.is_there_clover():
+					final_clover_flexibility += DATA.new_clover_add
+				# Во, терь точно не будет ставить куда нельзя ставить
+				if not my_field.get_is_this_clover_on_this_cell_acceptable(
+				Clover.new_scene(i), cell):
+					final_clover_flexibility = -1
 				
 				if not (i in all_moves):
 					all_moves[i] = []
@@ -201,6 +212,22 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 		print(uv, " ", rv, " ", dv, " ", lv)
 		print("FINAL FLEX: ", flexibility)
 	return flexibility
+
+
+func estimate_position_quality(x: int, y: int, number: int) -> float:
+	# Position value: 0 for (0,0), 1 for (3,3)
+	var position_weight: float = float(x + y) / 6.0
+	
+	# Expected number for this position: 1 for (0,0), 20 for (3,3)
+	var expected_number: float = 1.0 + position_weight * 19.0
+	
+	# How far is actual number from expected? (0 to 19)
+	var deviation: float = abs(float(number) - expected_number)
+	
+	# Maximum possible deviation is 19
+	var quality: float = 1.0 - (deviation / 19.0)
+	
+	return quality
 
 
 func _get_clover_pile_dict():
