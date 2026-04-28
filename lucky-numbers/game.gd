@@ -12,7 +12,7 @@ var cur_player
 
 
 func _ready():
-	players = [AiPlayer.new(), HumanPlayer.new()]
+	players = Evolution.get_next_two_players()
 	cur_player = players[0]
 	$Field.set_up_start_diagonal()
 	$Field.player = players[0]
@@ -34,6 +34,14 @@ func end_turn():
 	ended_turn.emit()
 	if cur_player is AiPlayer:
 		cur_player.turn()
+
+
+# for generation specifically
+func end_of_game(who_won: AiPlayer):
+	if who_won:
+		who_won.victory_count += 1
+		print("win")
+	get_tree().reload_current_scene()
 
 
 func whos_this_cell(cell):

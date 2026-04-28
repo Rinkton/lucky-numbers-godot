@@ -3,12 +3,13 @@ class_name AiPlayer
 
 
 const FIELD_SIZE := 4
-const DATA = preload("res://player/ai_player_data.tres") as AiPlayerData
+var data = load("res://player/ai_player_data.tres").duplicate() as AiPlayerData
 
 var my_field: Field
 var enemy_field: Field
 var best_moves := {}
 var all_moves := {}
+var victory_count := 0
 
 
 func _init():
@@ -23,9 +24,11 @@ func turn():
 	_get_clover_pile_flexibility(my_field)
 	#print("best ", best_moves)
 	var clover = G.game.clover_pile.pop_random_clover()
-	print(clover.number)
+	if clover == null:
+		G.game.end_of_game(null)
+		return
+	#print(clover.number)
 	# TODO: Нужны хорошие гибкие рычаги калибровки, а также их редактура прям во время игры
-	# TODO: Urgency Bonus for Corners, or he will put 20 always not in the corner
 	# TODO: Мб должен следить, сколько пустых клеток осталось у него, у меня, также
 	# должен резко реагировать, если он может сделать победный ход
 	# TODO: take back 4 packs for evolution algorithm(and divide in 2 the coef at
@@ -33,15 +36,18 @@ func turn():
 	
 	# CloverPile может истощиться
 	if is_instance_valid(clover):
-		print(best_moves[clover.number])
+		#print(best_moves[clover.number])
+		# if is too confused that can't choose the move we declare it as his lose
+		if best_moves[clover.number]["x"] == -1:
+			G.game.end_of_game(enemy_field.player)
 		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
-		if not cell.is_there_clover():
-			print("empty cell")
-		else:
-			print("replaced: " + str(cell.get_clover().number))
+		#if not cell.is_there_clover():
+		#	print("empty cell")
+		#else:
+		#	print("replaced: " + str(cell.get_clover().number))
 		cell.put_clover_turn(clover, G.game.clover_pile)
-	print("coef: " + str(estimate_position_quality(best_moves[clover.number]["x"], 
-		best_moves[clover.number]["y"], clover.number)))
+	#print("coef: " + str(estimate_position_quality(best_moves[clover.number]["x"], 
+	#	best_moves[clover.number]["y"], clover.number)))
 	G.debug_panel.set_all_moves(all_moves, my_field)
 	#print()
 	#print()
@@ -111,20 +117,21 @@ func _get_clover_pile_flexibility(field: Field):
 				
 				# Для мотивации поставить новый клевер
 				# Меньше, чем дальше к правому краю, ибо там flexibility выше само по себе
-				var motivation = DATA.left_up_corner_coef * \
-					(DATA.motivation_position_curve.sample((x + y + 1)/7))
+				var motivation = data.left_up_corner_coef * \
+					(data.motivation_position_curve.sample((x + y + 1)/7))
 
-				motivation += estimate_position_quality(x, y, i) * DATA.estimate_position_quiality_coef
+				motivation += estimate_position_quality(x, y, i) * data.estimate_position_quiality_coef
 				var final_clover_flexibility := clover_flexibility
 				if clover_flexibility != 0:
 					final_clover_flexibility += motivation
 				if not cell.is_there_clover():
-					final_clover_flexibility *= DATA.new_clover_mult
+					final_clover_flexibility *= data.new_clover_mult
 				
 				if cell.is_there_clover():
 					var this_cell_flexibility =  _get_cell_flexibility(cell)
-					var irreplacability = (1 / this_cell_flexibility) * DATA.irreplacability_coef
-					motivation += irreplacability
+					if this_cell_flexibility != 0:
+						var irreplacability = (1 / this_cell_flexibility) * data.irreplacability_coef
+						motivation += irreplacability
 				
 				# Во, терь точно не будет ставить куда нельзя ставить
 				if not my_field.get_is_this_clover_on_this_cell_acceptable(
@@ -216,6 +223,7 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 	while number <= max:
 		flexibility += clover_pile_dict[number]
 		number += 1
+	"""
 	if field.get_vector_of_cell(cell) == Vector2i(1, 0) and imagine_clover == Vector3i(1, 1, 2) and false:
 		print()
 		print("=====")
@@ -224,6 +232,7 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 		print(min, " ", max)
 		print(uv, " ", rv, " ", dv, " ", lv)
 		print("FINAL FLEX: ", flexibility)
+	"""
 	return flexibility
 
 

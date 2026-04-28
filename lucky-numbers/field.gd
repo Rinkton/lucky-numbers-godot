@@ -87,6 +87,7 @@ func _on_game_ended_turn():
 	if get_is_full():
 		$StateLabel.text = "Победа!"
 		$StateLabel.add_theme_color_override("font_color", Color.GREEN)
+		game.end_of_game(player)
 		game.cur_player = null
 	else:
 		$StateLabel.visible = game.cur_player == player
