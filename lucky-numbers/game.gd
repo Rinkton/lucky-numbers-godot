@@ -40,7 +40,6 @@ func end_turn():
 func end_of_game(who_won: AiPlayer):
 	if who_won:
 		who_won.victory_count += 1
-		print("win")
 	get_tree().reload_current_scene()
 
 

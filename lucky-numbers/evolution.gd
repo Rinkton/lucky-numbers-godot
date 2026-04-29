@@ -4,11 +4,12 @@ extends Node
 var cur_players := get_initial_players()
 var i_player := 0
 var j_player := 0
+var generation := 0
 
 
 func get_initial_players() -> Array:
 	var initial_players := []
-	for i in range(3):
+	for i in range(20):
 		var p = AiPlayer.new()
 		p.data.randomize_genes()
 		initial_players.append(p)
@@ -23,18 +24,17 @@ func get_next_two_players() -> Array:
 	# last player can't play with itself
 	if i_player >= len(cur_players) - 1:
 		# TODO: don't forget to make a right output, written in workbook
-		for p in cur_players:
-			print(p.victory_count)
+		# TODO: 20 players
 		end_of_round_robin()
 		return get_next_two_players()
 	if i_player == j_player:
 		printerr("i_player equals j_player!")
-	print(i_player, " ", j_player)
 	return [cur_players[i_player], cur_players[j_player]]
 
 
 func end_of_round_robin():
 	var selected_players := pick_weighted_players(cur_players, 3) # 3 old players
+	output_report(selected_players)
 	var new_players := get_crossover_players(selected_players) # 20 new players
 	mutate_players(new_players)
 	cur_players = new_players
@@ -105,3 +105,19 @@ func pick_weighted_players(players: Array, n: int) -> Array:
 		weights.remove_at(idx)
 
 	return result
+
+
+func output_report(selected_players):
+	print("Generation №" + str(generation))
+	for s in selected_players:
+		var out := ""
+		out += "max_wins: " + str(s.victory_count)
+		for gene_name in AiPlayerData.get_gene_names():
+			out += " | " + gene_name + ": " + str(round_place(s.data.get(gene_name), 2))
+		print(out)
+	print()
+	generation += 1
+
+
+func round_place(num, places):
+	return (round(num*pow(10,places))/pow(10,places))

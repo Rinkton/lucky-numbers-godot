@@ -9,7 +9,10 @@ var my_field: Field
 var enemy_field: Field
 var best_moves := {}
 var all_moves := {}
-var victory_count := 0
+var victory_count := 0:
+	set(value):
+		victory_count = value
+		victory_count = max(0, victory_count)
 
 
 func _init():
@@ -39,7 +42,9 @@ func turn():
 		#print(best_moves[clover.number])
 		# if is too confused that can't choose the move we declare it as his lose
 		if best_moves[clover.number]["x"] == -1:
-			G.game.end_of_game(enemy_field.player)
+			victory_count -= 1
+			G.game.end_of_game(null)
+			return
 		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
 		#if not cell.is_there_clover():
 		#	print("empty cell")
