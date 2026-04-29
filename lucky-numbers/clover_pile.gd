@@ -34,12 +34,16 @@ func get_clover():
 	return null
 
 
+func reveal_clover():
+	var clover = pop_random_clover()
+	add_child(clover)
+
+
 func _on_lmb():
 	var game = await G.get_game()
 	if game.cur_player is HumanPlayer or true: #### TODO
 		if not is_there_clover():
-			var clover = pop_random_clover()
-			add_child(clover)
+			reveal_clover()
 
 
 func _on_focus_exited():

@@ -8,7 +8,7 @@ var data = load("res://player/ai_player_data.tres").duplicate() as AiPlayerData
 var my_field: Field
 var enemy_field: Field
 var best_moves := {}
-var all_moves := {}
+#var all_moves := {}
 var victory_count := 0:
 	set(value):
 		victory_count = value
@@ -20,13 +20,11 @@ func _init():
 
 
 func turn():
-	all_moves = {}
-	var clover_pile_dict = _get_clover_pile_dict()
-	# var a = my_field.get_cell(0, 0).get_clover().number
-	# _get_cell_flexibility(my_field.get_cell(1, 1))
+	#all_moves = {}
 	_get_clover_pile_flexibility(my_field)
-	#print("best ", best_moves)
-	var clover = G.game.clover_pile.pop_random_clover()
+	G.game.clover_pile.reveal_clover()
+	var clover = G.game.clover_pile.get_node("Clover")
+	G.game.clover_pile.remove_child(clover)
 	if clover == null:
 		G.game.end_of_game(null)
 		return
@@ -53,7 +51,7 @@ func turn():
 		cell.put_clover_turn(clover, G.game.clover_pile)
 	#print("coef: " + str(estimate_position_quality(best_moves[clover.number]["x"], 
 	#	best_moves[clover.number]["y"], clover.number)))
-	G.debug_panel.set_all_moves(all_moves, my_field)
+#G.debug_panel.set_all_moves(all_moves, my_field)
 	#print()
 	#print()
 	#for i in range(1, 21):
@@ -107,8 +105,9 @@ func _get_clover_pile_flexibility(field: Field):
 		for y in range(FIELD_SIZE):
 			for x in range(FIELD_SIZE):
 				var clover_flexibility := 0
+				var clover_free = Clover.new_scene(i)
 				if field.get_is_this_clover_on_this_cell_acceptable(
-				Clover.new_scene(i), field.get_cell(x, y)):
+				clover_free, field.get_cell(x, y)):
 					# for checking cells with our clover placed on (x, y)
 					for yy in range(FIELD_SIZE):
 						for xx in range(FIELD_SIZE):
@@ -140,16 +139,17 @@ func _get_clover_pile_flexibility(field: Field):
 				
 				# Во, терь точно не будет ставить куда нельзя ставить
 				if not my_field.get_is_this_clover_on_this_cell_acceptable(
-				Clover.new_scene(i), cell):
+				clover_free, cell):
 					final_clover_flexibility = -1
+				clover_free.queue_free()
 				
-				if not (i in all_moves):
-					all_moves[i] = []
-				all_moves[i].append({
-					"x": x,
-					"y": y,
-					"flex": str(final_clover_flexibility) + " - \n" + str(int(motivation)),
-				})
+				#if not (i in all_moves):
+				#	all_moves[i] = []
+				#all_moves[i].append({
+				#	"x": x,
+				#	"y": y,
+				#	"flex": str(final_clover_flexibility) + " - \n" + str(int(motivation)),
+				#})
 				
 				if best_moves[i]["flex"] < final_clover_flexibility:
 					best_moves[i] = {

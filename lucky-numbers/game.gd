@@ -40,7 +40,17 @@ func end_turn():
 func end_of_game(who_won: AiPlayer):
 	if who_won:
 		who_won.victory_count += 1
-	get_tree().reload_current_scene()
+	reload_scene()
+
+
+func reload_scene():
+	set_process(false)
+	set_physics_process(false)
+	
+	await get_tree().create_timer(2).timeout
+	
+	# Меняем сцену с задержкой, чтобы текущий кадр завершился чисто
+	get_tree().call_deferred("change_scene_to_file", "res://game.tscn")
 
 
 func whos_this_cell(cell):

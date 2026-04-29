@@ -1,16 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bnardd4ebq20m"]
+[gd_scene format=3 uid="uid://bnardd4ebq20m"]
 
 [ext_resource type="Texture2D" uid="uid://c3mw6yoa57nxb" path="res://clover.png" id="1_4bfpu"]
-[ext_resource type="Script" path="res://clover.gd" id="2_gu2bm"]
+[ext_resource type="Script" uid="uid://g15q0tvwl4vq" path="res://clover.gd" id="2_gu2bm"]
 
-[node name="Clover" type="Sprite2D"]
+[node name="Clover" type="Sprite2D" unique_id=317779522]
 position = Vector2(50, 50)
 texture = ExtResource("1_4bfpu")
 hframes = 3
 frame = 1
 script = ExtResource("2_gu2bm")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1460100809]
 offset_left = -48.0
 offset_top = -48.0
 offset_right = 48.0

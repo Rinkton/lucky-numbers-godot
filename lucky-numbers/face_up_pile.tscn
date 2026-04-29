@@ -1,21 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://b5sotkq43tjnq"]
+[gd_scene format=3 uid="uid://b5sotkq43tjnq"]
 
 [ext_resource type="Script" uid="uid://bsupq8gop2yjp" path="res://face_up_pile.gd" id="1_v24p4"]
 
-[node name="FaceUpPile" type="Control"]
+[node name="FaceUpPile" type="Control" unique_id=1218873648]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_v24p4")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=423713958]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/separation = 10
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1292882115]
 self_modulate = Color(1, 1, 1, 0.39215687)
 layout_mode = 0
 offset_right = 1024.0

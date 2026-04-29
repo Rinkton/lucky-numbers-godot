@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://cmkydfyib5gju"]
 
-[ext_resource type="Script" uid="uid://cagoduah7s04e" path="res://evolution_node.gd" id="1_7uvwl"]
+[sub_resource type="GDScript" id="GDScript_0c531"]
+script/source = "extends Control
+"
 
 [node name="EvolutionNode" type="Control" unique_id=841498149]
 layout_mode = 3
@@ -8,4 +10,4 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
-script = ExtResource("1_7uvwl")
+script = SubResource("GDScript_0c531")
