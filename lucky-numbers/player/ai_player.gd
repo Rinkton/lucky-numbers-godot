@@ -21,15 +21,14 @@ func _init():
 
 func turn():
 	#all_moves = {}
-	_get_clover_pile_flexibility(my_field)
+	var clover_pile_worth = _get_clover_pile_worth_for_me()
+	
 	G.game.clover_pile.reveal_clover()
 	var clover = G.game.clover_pile.get_node("Clover")
 	G.game.clover_pile.remove_child(clover)
 	if clover == null:
 		G.game.end_of_game(null)
 		return
-	#print(clover.number)
-	# TODO: Нужны хорошие гибкие рычаги калибровки, а также их редактура прям во время игры
 	# TODO: Мб должен следить, сколько пустых клеток осталось у него, у меня, также
 	# должен резко реагировать, если он может сделать победный ход
 	# TODO: take back 4 packs for evolution algorithm(and divide in 2 the coef at
@@ -54,29 +53,17 @@ func turn():
 #G.debug_panel.set_all_moves(all_moves, my_field)
 	#print()
 	#print()
-	#for i in range(1, 21):
-	#	if i in all_moves:
-	#		print(str(i) + "              " + str(all_moves[i]))
-
-
-func print_best_moves(best_moves):
-	for i in range(1, 21):
-		print(str(i) + " " + str(best_moves[i]))
 
 
 func _get_clover_pile_worth_for_me():
-	var cur_empty = _get_flexibility(true, my_field)
-	var cur_busy = _get_flexibility(false, my_field)
-	var clover_pile_my_flexibility_dict = _get_clover_pile_flexibility(my_field)
-	var new_empty = clover_pile_my_flexibility_dict["empty"]
-	var new_busy = clover_pile_my_flexibility_dict["busy"]
+	var clover_pile_my_flexibility = _get_clover_pile_flexibility(my_field)
 	
 	var count = _get_clovers_count_in_pile()
 	# Новое
 	# , делить на количество клеверов в куче(по итогу то мы получим только 1) и ещё на 16, ибо
 	# Мы помимо клеток для выбора клевера перебирали ещё и ценность для остальных 15 клеток минус
 	# ценность без клевера из кучи на поле
-	var worth = (new_empty + new_busy) / (count) - (cur_empty + cur_busy)
+	var worth = clover_pile_my_flexibility / count
 	
 	return worth
 
@@ -93,8 +80,7 @@ func _get_flexibility(empty: bool, field: Field):
 
 
 func _get_clover_pile_flexibility(field: Field):
-	var flexibility_empty := 0
-	var flexibility_busy := 0
+	var flexibility := 0
 	var clover_pile_dict = _get_clover_pile_dict()
 	best_moves = {}
 	for i in range(1, 21):
@@ -117,7 +103,6 @@ func _get_clover_pile_flexibility(field: Field):
 							var cell_flexibility = _get_cell_flexibility(cell, Vector3i(x, y, i))
 							clover_flexibility += cell_flexibility
 				var cell = field.get_cell(x, y)
-				clover_flexibility *= clover_pile_dict[i]
 				
 				# Для мотивации поставить новый клевер
 				# Меньше, чем дальше к правому краю, ибо там flexibility выше само по себе
@@ -157,11 +142,8 @@ func _get_clover_pile_flexibility(field: Field):
 						"y": y,
 						"flex": final_clover_flexibility,
 					}
-				if cell.is_there_clover():
-					flexibility_busy += best_moves[i]["flex"]
-				else:
-					flexibility_empty += best_moves[i]["flex"]
-	return {"busy": flexibility_busy, "empty": flexibility_empty}
+		flexibility += best_moves[i]["flex"] * clover_pile_dict[i]
+	return flexibility
 
 
 ## imagine_clover we consider that there is an additional (z) type clover on (x, y) cell 
