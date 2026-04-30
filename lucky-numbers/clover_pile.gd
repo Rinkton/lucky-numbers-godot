@@ -27,6 +27,10 @@ func is_there_clover():
 	return is_instance_valid(get_clover())
 
 
+func is_there_clovers_left():
+	return len(clovers) > 0
+
+
 func get_clover():
 	for a in get_children():
 		if a is Clover:

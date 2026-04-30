@@ -21,33 +21,55 @@ func _init():
 
 func turn():
 	#all_moves = {}
+	await G.get_tree().create_timer(1).timeout # dramatic pause
 	var clover_pile_worth = _get_clover_pile_worth_for_me()
-	
-	G.game.clover_pile.reveal_clover()
-	var clover = G.game.clover_pile.get_node("Clover")
-	G.game.clover_pile.remove_child(clover)
-	if clover == null:
-		G.game.end_of_game(null)
-		return
+	var face_up_dict = _get_best_face_up_move_for_me()
+	print(clover_pile_worth)
+	print(face_up_dict)
+	for i in range(1, 21):
+		print(str(i) + "    " + str(best_moves[i]))
+	if clover_pile_worth > face_up_dict["worth"] * data.face_up_coef and G.game.clover_pile.is_there_clovers_left():
+		G.game.clover_pile.reveal_clover()
+		var clover = G.game.clover_pile.get_node("Clover")
+		G.game.clover_pile.remove_child(clover)
+		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
+		cell.put_clover_turn(clover, G.game.clover_pile)
+	else:
+		var cell = face_up_dict["cell"]
+		var best_move = best_moves[cell.get_clover().number]
+		var field_cell = my_field.get_cell(best_move["x"], best_move["y"])
+		var clover = cell.get_clover()
+		cell.remove_child(clover)
+		field_cell.put_clover_turn(clover, cell)
+		cell.queue_free()
+		pass # do face up turn with face_up_dict["cell"]
 	# TODO: Мб должен следить, сколько пустых клеток осталось у него, у меня, также
 	# должен резко реагировать, если он может сделать победный ход
 	# TODO: take back 4 packs for evolution algorithm(and divide in 2 the coef at
 	# the end of learning)
+	# TODO: Почему то вместо того, чтобы брать из facedown-а может брать и заменять
+	# 8 на 8 беря из face up-а, что бессмысленно как будто бы
+	# Ещё в (0, 0) клетке заменил 1 на 2 из face up, нахера. И потом обратно 2 на 1
+	# В принципе в эндгейме начинает тупить с этими face up-ами
+	# ЩА ВОТ сделал face_up_coef = 1 и норм, но всё равно может начать перековыривать
+	# face up в конце, вместо того, чтобы рыться в facedown и искать последний клевер
+	# Возможно увеличение new_clover_coef чем больше клеток у него заполнено сподвигнет его
+	# ВОЩЕ РИЛ как будто new_clover_coef не влияет так хорошо как должен но я не уверен
+	# На выбор между facedown и faceup
 	
 	# CloverPile может истощиться
-	if is_instance_valid(clover):
+	#if is_instance_valid(clover):
 		#print(best_moves[clover.number])
 		# if is too confused that can't choose the move we declare it as his lose
-		if best_moves[clover.number]["x"] == -1:
-			victory_count -= 1
-			G.game.end_of_game(null)
-			return
-		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
+	#	if best_moves[clover.number]["x"] == -1:
+	#		victory_count -= 1
+	#		G.game.end_of_game(null)
+	#		return
+		
 		#if not cell.is_there_clover():
 		#	print("empty cell")
 		#else:
 		#	print("replaced: " + str(cell.get_clover().number))
-		cell.put_clover_turn(clover, G.game.clover_pile)
 	#print("coef: " + str(estimate_position_quality(best_moves[clover.number]["x"], 
 	#	best_moves[clover.number]["y"], clover.number)))
 #G.debug_panel.set_all_moves(all_moves, my_field)
@@ -68,6 +90,18 @@ func _get_clover_pile_worth_for_me():
 	return worth
 
 
+func _get_best_face_up_move_for_me():
+	var face_up_cells = G.game.face_up_pile.get_cells()
+	var best_cell: Cell
+	var best_flexibility := -1
+	for c in face_up_cells:
+		var flex = best_moves[c.get_clover().number]["flex"]
+		if flex > best_flexibility:
+			best_cell = c
+			best_flexibility = flex
+	return {"cell": best_cell, "worth": best_flexibility}
+
+
 func _get_flexibility(empty: bool, field: Field):
 	var flexibility := 0
 	for y in range(FIELD_SIZE):
@@ -86,8 +120,6 @@ func _get_clover_pile_flexibility(field: Field):
 	for i in range(1, 21):
 		best_moves[i] = {"x": -1, "y": -1, "flex": 0}
 	for i in range(1, 21):
-		if clover_pile_dict[i] == 0:
-			continue
 		for y in range(FIELD_SIZE):
 			for x in range(FIELD_SIZE):
 				var clover_flexibility := 0

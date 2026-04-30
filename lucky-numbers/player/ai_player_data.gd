@@ -7,6 +7,8 @@ class_name AiPlayerData
 @export var new_clover_mult: float = 1.2
 @export var left_up_corner_coef: float = 100
 @export var irreplacability_coef: float = 100
+# Если больше 1, то знач считает, что определённость лучше среднестатистической выгоды
+@export var face_up_coef: float = 1
 
 
 func randomize_genes():

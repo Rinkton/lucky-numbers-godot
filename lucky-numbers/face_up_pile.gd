@@ -18,6 +18,10 @@ func add_clover(clover):
 	$HBoxContainer.add_child(cell)
 
 
+func get_cells():
+	return $HBoxContainer.get_children()
+
+
 func _on_panel_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
