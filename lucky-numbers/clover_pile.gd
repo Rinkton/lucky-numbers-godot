@@ -7,7 +7,7 @@ var clovers := []
 
 func _ready():
 	# TODO: only 2 packs, not 4
-	for i in range(4):
+	for i in range(2):
 		for n in range(20):
 			var clover = Clover.new_scene(n+1)
 			clovers.append(clover)
