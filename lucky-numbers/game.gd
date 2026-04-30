@@ -12,7 +12,7 @@ var cur_player
 
 
 func _ready():
-	players = Evolution.get_next_two_players()
+	players = [AiPlayer.new(), HumanPlayer.new()]
 	cur_player = players[0]
 	$Field.set_up_start_diagonal()
 	$Field.player = players[0]
