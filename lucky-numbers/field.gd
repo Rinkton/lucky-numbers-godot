@@ -64,6 +64,15 @@ func get_cell(x: int, y: int):
 	return $VBoxContainer.get_child(y).get_child(x)
 
 
+func get_busy_cells_count():
+	var count := 0
+	for y in range(4):
+		for x in range(4):
+			if $VBoxContainer.get_child(y).get_child(x).is_there_clover():
+				count += 1
+	return count
+
+
 func get_vector_of_cell(cell: Cell) -> Vector2i:
 	for y in range($VBoxContainer.get_child_count()):
 		var row = $VBoxContainer.get_child(y)

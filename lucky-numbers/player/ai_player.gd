@@ -22,7 +22,7 @@ func turn():
 	await G.get_tree().create_timer(1).timeout # dramatic pause
 	var clover_pile_worth = _get_clover_pile_worth_for_me()
 	var face_up_dict = _get_best_face_up_move_for_me()
-	if max(0, clover_pile_worth) > face_up_dict["worth"] * data.face_up_coef and G.game.clover_pile.is_there_clovers_left():
+	if max(0, clover_pile_worth) > face_up_dict["worth"] and G.game.clover_pile.is_there_clovers_left():
 		G.game.clover_pile.reveal_clover()
 		var clover = G.game.clover_pile.get_node("Clover")
 		G.game.clover_pile.remove_child(clover)
@@ -95,7 +95,7 @@ func _get_clover_pile_flexibility(field: Field):
 	var clover_pile_dict = _get_clover_pile_dict()
 	best_moves = {}
 	for i in range(1, 21):
-		best_moves[i] = {"x": -1, "y": -1, "flex": 0}
+		best_moves[i] = {"x": -1, "y": -1, "flex": -9999999999}
 	for i in range(1, 21):
 		for y in range(FIELD_SIZE):
 			for x in range(FIELD_SIZE):
@@ -123,14 +123,14 @@ func _get_clover_pile_flexibility(field: Field):
 				var final_clover_flexibility := clover_flexibility
 				if clover_flexibility > 0:
 					final_clover_flexibility += motivation
-				if not cell.is_there_clover():
-					final_clover_flexibility += 50 * \
-						(data.new_clover_mult - 1)
+				if cell.is_there_clover():
+					# TODO: coef
+					final_clover_flexibility -= 25 * sqrt(my_field.get_busy_cells_count())
 				
 				# Во, терь точно не будет ставить куда нельзя ставить
 				if not my_field.get_is_this_clover_on_this_cell_acceptable(
 				clover_free, cell):
-					final_clover_flexibility = -1
+					final_clover_flexibility = -9999999
 				clover_free.queue_free()
 				
 				if best_moves[i]["flex"] < final_clover_flexibility:
