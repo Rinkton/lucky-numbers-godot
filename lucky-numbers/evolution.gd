@@ -1,6 +1,6 @@
 extends Node
 
-
+"""
 var cur_players := get_initial_players()
 var i_player := 0
 var j_player := 0
@@ -121,3 +121,5 @@ func output_report(selected_players):
 
 func round_place(num, places):
 	return (round(num*pow(10,places))/pow(10,places))
+
+"""

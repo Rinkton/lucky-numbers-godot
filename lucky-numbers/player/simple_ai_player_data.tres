@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AiPlayerData" format=3 uid="uid://c22pfjdn5bfqu"]
 
-[ext_resource type="Script" uid="uid://c0gvvopitbbsc" path="res://player/ai_player_data.gd" id="1_s8my4"]
+[ext_resource type="Script" uid="uid://c0gvvopitbbsc" path="res://player/simple_ai_player_data.gd" id="1_s8my4"]
 
 [sub_resource type="Curve" id="Curve_s8my4"]
 _data = [Vector2(0, 0.94382024), 0.0, 0.15280938, 0, 0, Vector2(1, 0.6328125), 0.0, 0.0, 0, 0]
