@@ -12,6 +12,8 @@ var victory_count := 0:
 	set(value):
 		victory_count = value
 		victory_count = max(0, victory_count)
+# helps to get rid off the cycles
+var all_clover_placements := []
 
 
 func _init():
@@ -26,11 +28,16 @@ func turn():
 		G.game.clover_pile.reveal_clover()
 		var clover = G.game.clover_pile.get_node("Clover")
 		G.game.clover_pile.remove_child(clover)
-		if best_moves[clover.number]["x"] == -1:
+		var best_move = best_moves[clover.number]
+		if best_moves[clover.number]["x"] == -1 or best_moves[clover.number]["flex"] < 0 or \
+		was_in_clover_placement(best_move["x"], best_move["y"], clover.number, 3):
 			G.game.face_up_pile.put_clover_turn(clover)
 		else:
 			var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
 			cell.put_clover_turn(clover, G.game.clover_pile)
+			all_clover_placements.append({"x": best_move["x"], 
+				"y": best_move["y"], 
+				"number": cell.get_clover().number})
 	else:
 		var cell = face_up_dict["cell"]
 		var best_move = best_moves[cell.get_clover().number]
@@ -38,6 +45,8 @@ func turn():
 		var clover = cell.get_clover()
 		cell.remove_child(clover)
 		field_cell.put_clover_turn(clover, cell)
+		all_clover_placements.append({"x": best_move["x"], "y": best_move["y"], 
+			"number": field_cell.get_clover().number})
 		cell.queue_free()
 	# TODO: Мб должен следить, сколько пустых клеток осталось у него, у меня, также
 	# должен резко реагировать, если он может сделать победный ход
@@ -72,8 +81,10 @@ func _get_best_face_up_move_for_me():
 	var best_cell: Cell
 	var best_flexibility := -1
 	for c in face_up_cells:
-		var flex = best_moves[c.get_clover().number]["flex"]
-		if flex > best_flexibility:
+		var best_move = best_moves[c.get_clover().number]
+		var flex = best_move["flex"]
+		if flex > best_flexibility and not was_in_clover_placement(
+		best_move["x"], best_move["y"], c.get_clover().number, 3):
 			best_cell = c
 			best_flexibility = flex
 	return {"cell": best_cell, "worth": best_flexibility}
@@ -109,23 +120,24 @@ func _get_clover_pile_flexibility(field: Field):
 							if xx == x and yy == y:
 								continue
 							var cell = field.get_cell(xx, yy)
-							var cell_flexibility = \
-								_get_cell_flexibility(cell, Vector3i(x, y, i)) - \
-								_get_cell_flexibility(cell)
+							var with_clover_flex = _get_cell_flexibility(cell, Vector3i(x, y, i))
+							var without_clover_flex = _get_cell_flexibility(cell)
+							var cell_flexibility = with_clover_flex - without_clover_flex
+							if with_clover_flex == 0 and without_clover_flex > 0:
+								clover_flexibility -= data.dead_cell_penalty
+							elif with_clover_flex > 0 and without_clover_flex == 0:
+								clover_flexibility -= data.revive_cell_reward
 							clover_flexibility += cell_flexibility
 				var cell = field.get_cell(x, y)
-				
-				# Для мотивации поставить новый клевер
-				# Меньше, чем дальше к правому краю, ибо там flexibility выше само по себе
-				var motivation = 0#data.left_up_corner_coef * \
-					#(data.motivation_position_curve.sample((x + y + 1)/7))
 
 				var final_clover_flexibility := clover_flexibility
-				if clover_flexibility > 0:
-					final_clover_flexibility += motivation
 				if cell.is_there_clover():
+					pass
 					# TODO: coef
-					final_clover_flexibility -= 25 * sqrt(my_field.get_busy_cells_count())
+					#final_clover_flexibility -= data.replacement_penalty * \
+					#sqrt(my_field.get_busy_cells_count())
+				else:
+					final_clover_flexibility += data.new_clover_reward
 				
 				# Во, терь точно не будет ставить куда нельзя ставить
 				if not my_field.get_is_this_clover_on_this_cell_acceptable(
@@ -218,6 +230,17 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 		print("FINAL FLEX: ", flexibility)
 	"""
 	return flexibility
+
+
+func was_in_clover_placement(x, y, number, count: int):
+	for i in range(count):
+		var num = len(all_clover_placements) - 1 - i
+		if num < 0:
+			break
+		var cp = all_clover_placements[num]
+		if cp["x"] == x and cp["y"] == y:# and cp["number"] == number:
+			return true
+	return false
 
 
 func estimate_position_quality(x: int, y: int, number: int) -> float:

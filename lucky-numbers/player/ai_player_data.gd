@@ -9,6 +9,10 @@ class_name AiPlayerData
 #@export var irreplacability_coef: float = 100
 # Если больше 1, то знач считает, что определённость лучше среднестатистической выгоды
 #@export var face_up_coef: float = 1
+@export var new_clover_reward: float = 40
+@export var dead_cell_penalty: float = 100
+@export var revive_cell_reward: float = 50
+@export var replacement_penalty: float = 25
 
 
 func randomize_genes():
