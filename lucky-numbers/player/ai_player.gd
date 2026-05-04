@@ -28,12 +28,15 @@ func turn():
 	print(face_up_dict)
 	for i in range(1, 21):
 		print(str(i) + "    " + str(best_moves[i]))
-	if clover_pile_worth > face_up_dict["worth"] * data.face_up_coef and G.game.clover_pile.is_there_clovers_left():
+	if max(0, clover_pile_worth) > face_up_dict["worth"] * data.face_up_coef and G.game.clover_pile.is_there_clovers_left():
 		G.game.clover_pile.reveal_clover()
 		var clover = G.game.clover_pile.get_node("Clover")
 		G.game.clover_pile.remove_child(clover)
-		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
-		cell.put_clover_turn(clover, G.game.clover_pile)
+		if best_moves[clover.number]["x"] == -1:
+			G.game.face_up_pile.put_clover_turn(clover)
+		else:
+			var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
+			cell.put_clover_turn(clover, G.game.clover_pile)
 	else:
 		var cell = face_up_dict["cell"]
 		var best_move = best_moves[cell.get_clover().number]
@@ -132,27 +135,33 @@ func _get_clover_pile_flexibility(field: Field):
 							if xx == x and yy == y:
 								continue
 							var cell = field.get_cell(xx, yy)
-							var cell_flexibility = _get_cell_flexibility(cell, Vector3i(x, y, i))
+							var cell_flexibility = \
+								_get_cell_flexibility(cell, Vector3i(x, y, i)) - \
+								_get_cell_flexibility(cell)
 							clover_flexibility += cell_flexibility
 				var cell = field.get_cell(x, y)
 				
+				# TODO: Я вроде починил flexibility, мб убрать все другие эвристики
+				# И действовать как есть?
+				
 				# Для мотивации поставить новый клевер
 				# Меньше, чем дальше к правому краю, ибо там flexibility выше само по себе
-				var motivation = data.left_up_corner_coef * \
-					(data.motivation_position_curve.sample((x + y + 1)/7))
+				var motivation = 0#data.left_up_corner_coef * \
+					#(data.motivation_position_curve.sample((x + y + 1)/7))
 
-				motivation += estimate_position_quality(x, y, i) * data.estimate_position_quiality_coef
+				#if cell.is_there_clover():
+				#	var this_cell_flexibility =  _get_cell_flexibility(cell)
+				#	if this_cell_flexibility != 0:
+				#		var irreplacability = (1 / this_cell_flexibility) * data.irreplacability_coef
+				#		motivation += irreplacability
+
+				#motivation += estimate_position_quality(x, y, i) * data.estimate_position_quiality_coef
 				var final_clover_flexibility := clover_flexibility
-				if clover_flexibility != 0:
+				if clover_flexibility > 0:
 					final_clover_flexibility += motivation
 				if not cell.is_there_clover():
-					final_clover_flexibility *= data.new_clover_mult
-				
-				if cell.is_there_clover():
-					var this_cell_flexibility =  _get_cell_flexibility(cell)
-					if this_cell_flexibility != 0:
-						var irreplacability = (1 / this_cell_flexibility) * data.irreplacability_coef
-						motivation += irreplacability
+					final_clover_flexibility += 50 * \
+						(data.new_clover_mult - 1)
 				
 				# Во, терь точно не будет ставить куда нельзя ставить
 				if not my_field.get_is_this_clover_on_this_cell_acceptable(

@@ -18,6 +18,12 @@ func add_clover(clover):
 	$HBoxContainer.add_child(cell)
 
 
+func put_clover_turn(clover):
+	add_clover(clover)
+	var game = await G.get_game()
+	game.end_turn()
+
+
 func get_cells():
 	return $HBoxContainer.get_children()
 
@@ -31,6 +37,4 @@ func _on_panel_gui_input(event):
 			
 			var clover = focus_owner.get_clover()
 			focus_owner.remove_child(clover)
-			add_clover(clover)
-			var game = await G.get_game()
-			game.end_turn()
+			put_clover_turn(clover)
