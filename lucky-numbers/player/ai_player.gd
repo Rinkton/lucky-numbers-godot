@@ -8,7 +8,6 @@ var data = load("res://player/ai_player_data.tres").duplicate() as AiPlayerData
 var my_field: Field
 var enemy_field: Field
 var best_moves := {}
-#var all_moves := {}
 var victory_count := 0:
 	set(value):
 		victory_count = value
@@ -20,14 +19,9 @@ func _init():
 
 
 func turn():
-	#all_moves = {}
 	await G.get_tree().create_timer(1).timeout # dramatic pause
 	var clover_pile_worth = _get_clover_pile_worth_for_me()
 	var face_up_dict = _get_best_face_up_move_for_me()
-	print(clover_pile_worth)
-	print(face_up_dict)
-	for i in range(1, 21):
-		print(str(i) + "    " + str(best_moves[i]))
 	if max(0, clover_pile_worth) > face_up_dict["worth"] * data.face_up_coef and G.game.clover_pile.is_there_clovers_left():
 		G.game.clover_pile.reveal_clover()
 		var clover = G.game.clover_pile.get_node("Clover")
@@ -45,7 +39,6 @@ func turn():
 		cell.remove_child(clover)
 		field_cell.put_clover_turn(clover, cell)
 		cell.queue_free()
-		pass # do face up turn with face_up_dict["cell"]
 	# TODO: Мб должен следить, сколько пустых клеток осталось у него, у меня, также
 	# должен резко реагировать, если он может сделать победный ход
 	# TODO: take back 4 packs for evolution algorithm(and divide in 2 the coef at
@@ -59,25 +52,6 @@ func turn():
 	# Возможно увеличение new_clover_coef чем больше клеток у него заполнено сподвигнет его
 	# ВОЩЕ РИЛ как будто new_clover_coef не влияет так хорошо как должен но я не уверен
 	# На выбор между facedown и faceup
-	
-	# CloverPile может истощиться
-	#if is_instance_valid(clover):
-		#print(best_moves[clover.number])
-		# if is too confused that can't choose the move we declare it as his lose
-	#	if best_moves[clover.number]["x"] == -1:
-	#		victory_count -= 1
-	#		G.game.end_of_game(null)
-	#		return
-		
-		#if not cell.is_there_clover():
-		#	print("empty cell")
-		#else:
-		#	print("replaced: " + str(cell.get_clover().number))
-	#print("coef: " + str(estimate_position_quality(best_moves[clover.number]["x"], 
-	#	best_moves[clover.number]["y"], clover.number)))
-#G.debug_panel.set_all_moves(all_moves, my_field)
-	#print()
-	#print()
 
 
 func _get_clover_pile_worth_for_me():
@@ -141,21 +115,11 @@ func _get_clover_pile_flexibility(field: Field):
 							clover_flexibility += cell_flexibility
 				var cell = field.get_cell(x, y)
 				
-				# TODO: Я вроде починил flexibility, мб убрать все другие эвристики
-				# И действовать как есть?
-				
 				# Для мотивации поставить новый клевер
 				# Меньше, чем дальше к правому краю, ибо там flexibility выше само по себе
 				var motivation = 0#data.left_up_corner_coef * \
 					#(data.motivation_position_curve.sample((x + y + 1)/7))
 
-				#if cell.is_there_clover():
-				#	var this_cell_flexibility =  _get_cell_flexibility(cell)
-				#	if this_cell_flexibility != 0:
-				#		var irreplacability = (1 / this_cell_flexibility) * data.irreplacability_coef
-				#		motivation += irreplacability
-
-				#motivation += estimate_position_quality(x, y, i) * data.estimate_position_quiality_coef
 				var final_clover_flexibility := clover_flexibility
 				if clover_flexibility > 0:
 					final_clover_flexibility += motivation
@@ -168,14 +132,6 @@ func _get_clover_pile_flexibility(field: Field):
 				clover_free, cell):
 					final_clover_flexibility = -1
 				clover_free.queue_free()
-				
-				#if not (i in all_moves):
-				#	all_moves[i] = []
-				#all_moves[i].append({
-				#	"x": x,
-				#	"y": y,
-				#	"flex": str(final_clover_flexibility) + " - \n" + str(int(motivation)),
-				#})
 				
 				if best_moves[i]["flex"] < final_clover_flexibility:
 					best_moves[i] = {
