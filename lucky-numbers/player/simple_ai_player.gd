@@ -18,7 +18,33 @@ func _init():
 
 
 func turn():
-	await G.get_tree().create_timer(1).timeout # dramatic pause
+	#await G.get_tree().create_timer(1).timeout # dramatic pause
+	if G.game.clover_pile.is_there_clovers_left():
+		var start_score = score()
+		var min_const := 1.0
+		var min_score = start_score + 1
+		var clover = G.game.clover_pile.pop_random_clover()
+		var best_pos = null
+		for y in range(4):
+			for x in range(4):
+				var cell = my_field.get_cell(x, y)
+				if my_field.get_is_this_clover_on_this_cell_acceptable(clover, cell):
+					if cell.is_there_clover():
+						var imagine_score = score(Vector3i(x, y, clover.number))
+						var replace_const = 2.0
+						if imagine_score + replace_const < min_score:
+							min_score = imagine_score
+							best_pos = Vector2(x, y)
+					else:
+						var imagine_score = score(Vector3i(x, y, clover.number))
+						if imagine_score < min_score:
+							min_score = imagine_score
+							best_pos = Vector2(x, y)
+		if best_pos != null:
+			var cell = my_field.get_cell(best_pos.x, best_pos.y)
+			cell.put_clover_turn(clover, G.game.clover_pile)
+		else:
+			G.game.face_up_pile.put_clover_turn(clover)
 	"""
 	G.game.face_up_pile.put_clover_turn(clover)
 	
@@ -35,6 +61,33 @@ func turn():
 		"number": field_cell.get_clover().number})
 	cell.queue_free()
 	"""
+
+
+func score(imagine_clover: Vector3i = Vector3i(-1, -1, 0)):
+	var total_stress := 0.0
+	var total_unhappiness := 0.0
+	for y in range(4):
+		for x in range(4):
+			var cell = my_field.get_cell(x, y)
+			if cell.is_there_clover():
+				total_unhappiness += unhappiness(cell, imagine_clover)
+			else:
+				total_stress += stress(cell, imagine_clover)
+	return 1 * total_stress + 0.075 * total_unhappiness
+
+
+# cell must be empty
+func stress(cell, imagine_clover: Vector3i = Vector3i(-1, -1, 0)):
+	return 1 / (_get_cell_flexibility(cell, imagine_clover)["flex"] + 1)
+
+
+# cell must be full
+func unhappiness(cell, imagine_clover: Vector3i = Vector3i(-1, -1, 0)):
+	var sur = _get_cell_flexibility(cell, imagine_clover)
+	var center_row = (sur["lv"] + sur["rv"]) / 2
+	var center_col = (sur["uv"] + sur["dv"]) / 2
+	var v = cell.get_clover().number
+	return abs(v - center_row) + (v - center_col)
 
 
 ## imagine_clover we consider that there is an additional (z) type clover on (x, y) cell 
@@ -101,7 +154,7 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 	while number <= max:
 		flexibility += clover_pile_dict[number]
 		number += 1
-	return flexibility
+	return {"flex": flexibility, "uv": uv, "rv": rv, "dv": dv, "lv": lv}
 
 
 func _get_clover_pile_dict():

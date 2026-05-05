@@ -7,8 +7,8 @@ signal ended_turn
 var players
 var cur_player
 
-@onready var clover_pile = $CloverPile
-@onready var face_up_pile = $FaceUpPile
+@onready var clover_pile: CloverPile = $CloverPile
+@onready var face_up_pile: FaceUpPile = $FaceUpPile
 
 
 func _ready():
