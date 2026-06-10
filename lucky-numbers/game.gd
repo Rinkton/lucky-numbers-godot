@@ -12,7 +12,7 @@ var cur_player
 
 
 func _ready():
-	players = [AiPlayer.new(), AiPlayer.new()]
+	players = [AiPlayer.new(), HumanPlayer.new()]
 	cur_player = players[0]
 	$Field.set_up_start_diagonal()
 	$Field.player = players[0]
@@ -36,9 +36,8 @@ func end_turn():
 		cur_player.turn()
 
 
-# for generation specifically
-func end_of_game(who_won: AiPlayer):
-	if who_won:
+func end_of_game(who_won):
+	if who_won and who_won is AiPlayer:
 		who_won.victory_count += 1
 	reload_scene()
 

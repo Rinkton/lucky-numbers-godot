@@ -69,15 +69,15 @@ func _get_best_face_up_move_for_me():
 	return {"cell": best_cell, "worth": best_flexibility}
 
 
-func _get_flexibility(empty: bool, field: Field):
-	var flexibility := 0
-	for y in range(FIELD_SIZE):
-		for x in range(FIELD_SIZE):
-			var cell = field.get_cell(x, y)
-			if cell.is_there_clover() == not empty:
-				var cell_flexibility = _get_cell_flexibility(cell)
-				flexibility += cell_flexibility
-	return flexibility
+#func _get_flexibility(empty: bool, field: Field):
+#	var flexibility := 0
+#	for y in range(FIELD_SIZE):
+#		for x in range(FIELD_SIZE):
+#			var cell = field.get_cell(x, y)
+#			if cell.is_there_clover() == not empty:
+#				var cell_flexibility = _get_cell_flexibility(cell)
+#				flexibility += cell_flexibility
+#	return flexibility
 
 
 func _get_clover_pile_flexibility(field: Field):
@@ -99,8 +99,15 @@ func _get_clover_pile_flexibility(field: Field):
 							if xx == x and yy == y:
 								continue
 							var cell = field.get_cell(xx, yy)
+							var before_cell_flexibility = _get_cell_flexibility(cell)
 							var cell_flexibility = _get_cell_flexibility(cell, Vector3i(x, y, i))
-							clover_flexibility += cell_flexibility
+							# high reward for unblocking critical situations
+							if before_cell_flexibility == 0 and cell_flexibility > 0:
+								clover_flexibility += data.unblocking_0_gap
+							elif before_cell_flexibility == 1 and cell_flexibility > 1:
+								clover_flexibility += data.unblocking_1_gap
+							else:
+								clover_flexibility += cell_flexibility
 				var cell = field.get_cell(x, y)
 				
 				# Для мотивации поставить новый клевер
@@ -115,25 +122,11 @@ func _get_clover_pile_flexibility(field: Field):
 				if not cell.is_there_clover():
 					final_clover_flexibility *= data.new_clover_mult
 				
-				if cell.is_there_clover():
-					var this_cell_flexibility =  _get_cell_flexibility(cell)
-					if this_cell_flexibility != 0:
-						var irreplacability = (1 / this_cell_flexibility) * data.irreplacability_coef
-						motivation += irreplacability
-				
 				# Во, терь точно не будет ставить куда нельзя ставить
 				if not my_field.get_is_this_clover_on_this_cell_acceptable(
 				clover_free, cell):
 					final_clover_flexibility = -1
 				clover_free.queue_free()
-				
-				#if not (i in all_moves):
-				#	all_moves[i] = []
-				#all_moves[i].append({
-				#	"x": x,
-				#	"y": y,
-				#	"flex": str(final_clover_flexibility) + " - \n" + str(int(motivation)),
-				#})
 				
 				if best_moves[i]["flex"] < final_clover_flexibility:
 					best_moves[i] = {
