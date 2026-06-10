@@ -19,32 +19,36 @@ func _init():
 
 func turn():
 	#await G.get_tree().create_timer(1).timeout # dramatic pause
+	# refactor it and make it work
 	if G.game.clover_pile.is_there_clovers_left():
+		var best_pos
+		var best_clover
+		var face_down_chosen: bool
 		var start_score = score()
-		var min_const := 1.0
-		var min_score = start_score + 1
-		var clover = G.game.clover_pile.pop_random_clover()
-		var best_pos = null
-		for y in range(4):
-			for x in range(4):
-				var cell = my_field.get_cell(x, y)
-				if my_field.get_is_this_clover_on_this_cell_acceptable(clover, cell):
-					if cell.is_there_clover():
-						var imagine_score = score(Vector3i(x, y, clover.number))
-						var replace_const = 2.0
-						if imagine_score + replace_const < min_score:
-							min_score = imagine_score
-							best_pos = Vector2(x, y)
-					else:
-						var imagine_score = score(Vector3i(x, y, clover.number))
-						if imagine_score < min_score:
-							min_score = imagine_score
-							best_pos = Vector2(x, y)
+		for cell in G.game.face_up_pile.get_cells():
+			var clover = cell.get_clover()
+			var best = get_best_for_this_clover(start_score, clover)
+			var score_const = 0
+			if best["min_score"] + score_const < start_score:
+				best_pos = best["best_pos"]
+				best_clover = clover
+		face_down_chosen = best_clover == null
+		var face_up_cell
+		if face_down_chosen:
+			best_clover = G.game.clover_pile.pop_random_clover()
+			var best = get_best_for_this_clover(start_score, best_clover)
+			best_pos = best["best_pos"]
+		else:
+			var cell = best_clover.get_parent()
+			face_up_cell = cell
+			cell.remove_child(best_clover)
+			cell.queue_free()
 		if best_pos != null:
 			var cell = my_field.get_cell(best_pos.x, best_pos.y)
-			cell.put_clover_turn(clover, G.game.clover_pile)
+			cell.put_clover_turn(best_clover, 
+				G.game.clover_pile if face_down_chosen else face_up_cell)
 		else:
-			G.game.face_up_pile.put_clover_turn(clover)
+			G.game.face_up_pile.put_clover_turn(best_clover)
 	"""
 	G.game.face_up_pile.put_clover_turn(clover)
 	
@@ -63,6 +67,31 @@ func turn():
 	"""
 
 
+func get_best_for_this_clover(start_score, clover):
+	var min_const := 1.0
+	var min_score = start_score + 1
+	var best_pos = null
+	for y in range(4):
+		for x in range(4):
+			var cell = my_field.get_cell(x, y)
+			if my_field.get_is_this_clover_on_this_cell_acceptable(clover, cell):
+				if cell.is_there_clover():
+					var imagine_score = score(Vector3i(x, y, clover.number))
+					var replace_const = 2
+					if imagine_score + replace_const < min_score:
+						min_score = imagine_score
+						best_pos = Vector2(x, y)
+				else:
+					var imagine_score = score(Vector3i(x, y, clover.number))
+					var new_clover_const = -0.25
+					if imagine_score - pow(abs(new_clover_const) * 
+					my_field.get_busy_cells_count(), 1.2) < min_score:
+						min_score = imagine_score
+						best_pos = Vector2(x, y)
+	return {"best_pos": best_pos, "min_score": min_score}
+
+
+# lower - better
 func score(imagine_clover: Vector3i = Vector3i(-1, -1, 0)):
 	var total_stress := 0.0
 	var total_unhappiness := 0.0
@@ -73,7 +102,7 @@ func score(imagine_clover: Vector3i = Vector3i(-1, -1, 0)):
 				total_unhappiness += unhappiness(cell, imagine_clover)
 			else:
 				total_stress += stress(cell, imagine_clover)
-	return 1 * total_stress + 0.075 * total_unhappiness
+	return 1 * total_stress + 0.05 * total_unhappiness
 
 
 # cell must be empty
@@ -86,6 +115,12 @@ func unhappiness(cell, imagine_clover: Vector3i = Vector3i(-1, -1, 0)):
 	var sur = _get_cell_flexibility(cell, imagine_clover)
 	var center_row = (sur["lv"] + sur["rv"]) / 2
 	var center_col = (sur["uv"] + sur["dv"]) / 2
+	if my_field.get_vector_of_cell(cell) == Vector2i(0, 0):
+		center_row = 1
+		center_col = 1
+	elif my_field.get_vector_of_cell(cell) == Vector2i(3, 3):
+		center_row = 20
+		center_col = 20
 	var v = cell.get_clover().number
 	return abs(v - center_row) + (v - center_col)
 
@@ -96,10 +131,10 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 	var vec = field.get_vector_of_cell(cell)
 	var imagine_clover_pos = Vector2i(imagine_clover.x, imagine_clover.y)
 	
-	var u := 1
-	var r := 1
-	var d := 1
-	var l := 1
+	var u := 0
+	var r := 0
+	var d := 0
+	var l := 0
 	var uv := 0
 	var rv := 21
 	var dv := 21
@@ -109,7 +144,7 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 		var this_vec = Vector2i(vec.x, vec.y - u)
 		if this_vec == imagine_clover_pos:
 			uv = imagine_clover.z
-		else:
+		elif this_vec != vec:
 			var c = field.get_cell(this_vec.x, this_vec.y)
 			if c.is_there_clover():
 				uv = c.get_clover().number
@@ -119,7 +154,7 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 		var this_vec = Vector2i(vec.x + r, vec.y)
 		if this_vec == imagine_clover_pos:
 			rv = imagine_clover.z
-		else:
+		elif this_vec != vec:
 			var c = field.get_cell(this_vec.x, this_vec.y)
 			if c.is_there_clover():
 				rv = c.get_clover().number
@@ -129,7 +164,7 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 		var this_vec = Vector2i(vec.x, vec.y + d)
 		if this_vec == imagine_clover_pos:
 			dv = imagine_clover.z
-		else:
+		elif this_vec != vec:
 			var c = field.get_cell(this_vec.x, this_vec.y)
 			if c.is_there_clover():
 				dv = c.get_clover().number
@@ -139,7 +174,7 @@ func _get_cell_flexibility(cell: Cell, imagine_clover: Vector3i = Vector3i(-1, -
 		var this_vec = Vector2i(vec.x - l, vec.y)
 		if this_vec == imagine_clover_pos:
 			lv = imagine_clover.z
-		else:
+		elif this_vec != vec:
 			var c = field.get_cell(this_vec.x, this_vec.y)
 			if c.is_there_clover():
 				lv = c.get_clover().number
