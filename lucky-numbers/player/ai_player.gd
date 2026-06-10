@@ -20,7 +20,6 @@ func _init():
 
 
 func turn():
-	#all_moves = {}
 	await G.get_tree().create_timer(1).timeout # dramatic pause
 	var clover_pile_worth = _get_clover_pile_worth_for_me()
 	var face_up_dict = _get_best_face_up_move_for_me()
@@ -43,38 +42,6 @@ func turn():
 		field_cell.put_clover_turn(clover, cell)
 		cell.queue_free()
 		pass # do face up turn with face_up_dict["cell"]
-	# TODO: Мб должен следить, сколько пустых клеток осталось у него, у меня, также
-	# должен резко реагировать, если он может сделать победный ход
-	# TODO: take back 4 packs for evolution algorithm(and divide in 2 the coef at
-	# the end of learning)
-	# TODO: Почему то вместо того, чтобы брать из facedown-а может брать и заменять
-	# 8 на 8 беря из face up-а, что бессмысленно как будто бы
-	# Ещё в (0, 0) клетке заменил 1 на 2 из face up, нахера. И потом обратно 2 на 1
-	# В принципе в эндгейме начинает тупить с этими face up-ами
-	# ЩА ВОТ сделал face_up_coef = 1 и норм, но всё равно может начать перековыривать
-	# face up в конце, вместо того, чтобы рыться в facedown и искать последний клевер
-	# Возможно увеличение new_clover_coef чем больше клеток у него заполнено сподвигнет его
-	# ВОЩЕ РИЛ как будто new_clover_coef не влияет так хорошо как должен но я не уверен
-	# На выбор между facedown и faceup
-	
-	# CloverPile может истощиться
-	#if is_instance_valid(clover):
-		#print(best_moves[clover.number])
-		# if is too confused that can't choose the move we declare it as his lose
-	#	if best_moves[clover.number]["x"] == -1:
-	#		victory_count -= 1
-	#		G.game.end_of_game(null)
-	#		return
-		
-		#if not cell.is_there_clover():
-		#	print("empty cell")
-		#else:
-		#	print("replaced: " + str(cell.get_clover().number))
-	#print("coef: " + str(estimate_position_quality(best_moves[clover.number]["x"], 
-	#	best_moves[clover.number]["y"], clover.number)))
-#G.debug_panel.set_all_moves(all_moves, my_field)
-	#print()
-	#print()
 
 
 func _get_clover_pile_worth_for_me():
