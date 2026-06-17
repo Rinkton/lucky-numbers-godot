@@ -36,23 +36,28 @@ func set_up_start_diagonal():
 func get_is_this_clover_on_this_cell_acceptable(this_clover: Clover, this_cell: Cell) -> bool:
 	var this_vector = get_vector_of_cell(this_cell)
 	
-	var up_cell = get_cell(this_vector.x, this_vector.y - 1)
-	var right_cell = get_cell(this_vector.x + 1, this_vector.y)
-	var down_cell = get_cell(this_vector.x, this_vector.y + 1)
-	var left_cell = get_cell(this_vector.x - 1, this_vector.y)
-	
-	if is_instance_valid(up_cell) and up_cell.is_there_clover():
-		if up_cell.get_clover().number >= this_clover.number:
-			return false
-	if is_instance_valid(right_cell) and right_cell.is_there_clover():
-		if right_cell.get_clover().number <= this_clover.number:
-			return false
-	if is_instance_valid(down_cell) and down_cell.is_there_clover():
-		if down_cell.get_clover().number <= this_clover.number:
-			return false
-	if is_instance_valid(left_cell) and left_cell.is_there_clover():
-		if left_cell.get_clover().number >= this_clover.number:
-			return false
+	# everywhere I use AiPlayer.FIELD_SIZE cuz anyway is_instance_valid() guarantees
+	# it won't crush
+	for i in range(1, AiPlayer.FIELD_SIZE):
+		var up_cell = get_cell(this_vector.x, this_vector.y - i)
+		if is_instance_valid(up_cell) and up_cell.is_there_clover():
+			if up_cell.get_clover().number >= this_clover.number:
+				return false
+	for i in range(1, AiPlayer.FIELD_SIZE):
+		var right_cell = get_cell(this_vector.x + i, this_vector.y)
+		if is_instance_valid(right_cell) and right_cell.is_there_clover():
+			if right_cell.get_clover().number <= this_clover.number:
+				return false
+	for i in range(1, AiPlayer.FIELD_SIZE):
+		var down_cell = get_cell(this_vector.x, this_vector.y + i)
+		if is_instance_valid(down_cell) and down_cell.is_there_clover():
+			if down_cell.get_clover().number <= this_clover.number:
+				return false
+	for i in range(1, AiPlayer.FIELD_SIZE):
+		var left_cell = get_cell(this_vector.x - i, this_vector.y)
+		if is_instance_valid(left_cell) and left_cell.is_there_clover():
+			if left_cell.get_clover().number >= this_clover.number:
+				return false
 	return true
 
 
