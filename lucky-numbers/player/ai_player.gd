@@ -13,6 +13,7 @@ var victory_count := 0:
 	set(value):
 		victory_count = value
 		victory_count = max(0, victory_count)
+var lst_moves_pool = []
 
 
 func _init():
@@ -33,6 +34,11 @@ func turn():
 		G.game.clover_pile.remove_child(clover)
 		var cell = my_field.get_cell(best_moves[clover.number]["x"], best_moves[clover.number]["y"])
 		cell.put_clover_turn(clover, G.game.clover_pile)
+		_add_to_lst_moves_pool({
+			"number": clover.number, 
+			"x": best_moves[clover.number]["x"], 
+			"y": best_moves[clover.number]["y"]
+			})
 	else:
 		var cell = face_up_dict["cell"]
 		var best_move = best_moves[cell.get_clover().number]
@@ -41,13 +47,33 @@ func turn():
 		cell.remove_child(clover)
 		field_cell.put_clover_turn(clover, cell)
 		cell.queue_free()
+		_add_to_lst_moves_pool({
+			"number": clover.number, 
+			"x": best_moves[clover.number]["x"], 
+			"y": best_moves[clover.number]["y"]
+			})
 		pass # do face up turn with face_up_dict["cell"]
+
+
+func _add_to_lst_moves_pool(dict):
+	lst_moves_pool.append(dict)
+	while len(lst_moves_pool) > 5:
+		lst_moves_pool.pop_front()
+
+
+func _check_dict_is_in_lst_moves_pool(dict):
+	for lst_move in lst_moves_pool:
+		if lst_move == dict:
+			return true
+	return false
 
 
 func _get_clover_pile_worth_for_me():
 	var clover_pile_my_flexibility = _get_clover_pile_flexibility(my_field)
 	
 	var count = _get_clovers_count_in_pile()
+	if count == 0:
+		return -1
 	# Новое
 	# , делить на количество клеверов в куче(по итогу то мы получим только 1) и ещё на 16, ибо
 	# Мы помимо клеток для выбора клевера перебирали ещё и ценность для остальных 15 клеток минус
@@ -62,8 +88,14 @@ func _get_best_face_up_move_for_me():
 	var best_cell: Cell
 	var best_flexibility := -1
 	for c in face_up_cells:
-		var flex = best_moves[c.get_clover().number]["flex"]
-		if flex > best_flexibility:
+		var number = c.get_clover().number
+		var flex = best_moves[number]["flex"]
+		var dict = { 
+			"number": number, 
+			"x": best_moves[number]["x"], 
+			"y": best_moves[number]["y"] 
+		}
+		if flex > best_flexibility and not _check_dict_is_in_lst_moves_pool(dict):
 			best_cell = c
 			best_flexibility = flex
 	return {"cell": best_cell, "worth": best_flexibility}
