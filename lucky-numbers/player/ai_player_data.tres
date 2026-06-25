@@ -11,4 +11,3 @@ script = ExtResource("1_s8my4")
 motivation_position_curve = SubResource("Curve_s8my4")
 estimate_position_quiality_coef = 120.0
 left_up_corner_coef = 40.0
-irreplacability_coef = 50.0

@@ -12,7 +12,7 @@ var cur_player
 
 
 func _ready():
-	players = [AiPlayer.new(), AiPlayer.new()]
+	players = [HumanPlayer.new(), AiPlayer.new()]
 	cur_player = players[0]
 	$Field.set_up_start_diagonal()
 	$Field.player = players[0]
