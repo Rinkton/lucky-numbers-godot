@@ -12,7 +12,13 @@ var cur_player
 
 
 func _ready():
-	players = [HumanPlayer.new(), AiPlayer.new()]
+	match G.game_mode:
+		G.GameMode.HUMAN_VS_HUMAN:
+			players = [HumanPlayer.new(), HumanPlayer.new()]
+		G.GameMode.HUMAN_VS_AI:
+			players = [HumanPlayer.new(), AiPlayer.new()]
+		G.GameMode.AI_VS_AI:
+			players = [AiPlayer.new(), AiPlayer.new()]
 	cur_player = players[0]
 	$Field.set_up_start_diagonal()
 	$Field.player = players[0]

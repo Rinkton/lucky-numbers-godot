@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://c7phhl0pgocvo"]
+
+[ext_resource type="Script" uid="uid://dkkrlht71jgle" path="res://main_menu.gd" id="1_06t4h"]
+
+[node name="MainMenu" type="Control" unique_id=1612859264]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_06t4h")
+
+[node name="Label" type="Label" parent="." unique_id=1619211957]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+text = "Lucky Numbers"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="." unique_id=1307715696]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+offset_right = 826.0
+grow_vertical = 0
+text = "Быстров Егор ИВТ-32БО для курсовой работы. 2026"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1894703349]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2068113591]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="HumanVsHuman" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1843663256]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Человек VS Человек"
+
+[node name="HumanVsAi" type="Button" parent="CenterContainer/VBoxContainer" unique_id=665283079]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Человек VS Компьютер"
+
+[node name="AiVsAi" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1645714728]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Компьютер VS Компьютер"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HumanVsHuman" to="." method="_on_human_vs_human_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HumanVsAi" to="." method="_on_human_vs_ai_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/AiVsAi" to="." method="_on_ai_vs_ai_pressed"]
